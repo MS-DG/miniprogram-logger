@@ -1,4 +1,5 @@
 export interface IPerformance {
+    TableName:string;
     CorrelationId: string;
     Extension: any;
     transform: Function;

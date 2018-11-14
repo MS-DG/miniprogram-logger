@@ -1,4 +1,5 @@
 export interface ILogger {
+    TableName:string;
     LogLevel: string;
     CorrelationId: string;
     Extension: any;

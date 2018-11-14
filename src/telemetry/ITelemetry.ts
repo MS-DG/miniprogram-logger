@@ -1,5 +1,6 @@
 
 export interface ITelemetry {
+    TableName:string;
     UserInfo: UserInfo,
     Extension?: any;
     CorrelationId?: string;

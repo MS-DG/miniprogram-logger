@@ -3,8 +3,13 @@
   "version": "0.0.1",
   "description": " It is used to log and gather statistics of users' behavior. ",
   "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist/**"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc src/index.ts --target es6 --outDir dist -d"
   },
   "repository": {
     "type": "git",
@@ -19,6 +24,9 @@
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/MS-DG/miniprogram-logger/issues"
+  },
+  "devDependencies": {
+    "typescript": "^2.8.1"
   },
   "homepage": "https://github.com/MS-DG/miniprogram-logger#readme"
 }

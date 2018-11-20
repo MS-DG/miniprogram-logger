@@ -1,16 +1,15 @@
 
 export interface ITelemetry {
-    TableName:string;
+    TableName: string;
     UserInfo: UserInfo,
-    Extension?: any;
-    CorrelationId?: string;
-    transfrom:Function;
-    log(action: string, parameter?: string, processTimeInMS?: number);
+    Extension: any,
+    transfrom: Function | undefined;
+    log(action: string, parameter?: string, processTimeInMS?: number, correlationId?: string): void;
 }
 
 export interface UserInfo {
     AppName: string;
     AppId: string;
-    OpenId?: string;
+    OpenId: string;
     UnionId?: string;
 }

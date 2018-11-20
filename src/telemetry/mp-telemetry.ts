@@ -11,17 +11,17 @@ export class WxMpTelemetry implements ITelemetry {
 
     private extensionJsonStr: string;
 
-    public transfrom: Function | undefined;
+    public CorrelationId: string;
 
-    constructor(tableName: string, userInfo: UserInfo, extension?: any, transfrom?: Function) {
+    constructor(tableName: string, userInfo: UserInfo, extension?: any, transfrom?: Function, correlationId: string = "") {
         this.TableName = tableName;
         this.UserInfo = userInfo;
         this.Extension = transfrom ? transfrom(extension) : extension
         this.extensionJsonStr = typeof(extension) != "string" ? JSON.stringify(extension) : extension;
-        this.transfrom = transfrom;
+        this.CorrelationId = correlationId;
     }
 
-    public log(action: string, parameter?: string, processTimeInMS?: number, correlationId?: string) {
+    public log(action: string, parameter?: string, processTimeInMS?: number, correlationId: string = "") {
         wx.reportAnalytics(
             this.TableName, {
                 id: Common.NewGuid(),
@@ -34,20 +34,20 @@ export class WxMpTelemetry implements ITelemetry {
     }
 
     private reassembleUserInfo(processTimeInMS?: number, correlationId?: string): string {
-        let obj : any = {};
-        obj["app_name"] = this.UserInfo.AppName;
-        obj["app_id"] = this.UserInfo.AppId;
-        obj["open_id"] = this.UserInfo.OpenId;
-        obj["union_id"] = this.UserInfo.UnionId;
-        obj["process_time"] = processTimeInMS;
-        obj["debug_correlation_id"] = correlationId;
-        obj["timestamp"] = new Date().toUTCString();
-        return JSON.stringify(obj);
+        let info : object = {
+            app_name: this.UserInfo.app_name,
+            app_id: this.UserInfo.app_id,
+            open_id: this.UserInfo.open_id,
+            union_id: this.UserInfo.union_id,
+            process_time: processTimeInMS,
+            debug_correlation_id: correlationId == "" ? this.CorrelationId : correlationId,
+            timestamp: new Date().toUTCString(),
+        };
+        return JSON.stringify(info);
     }
 
 }
 
 declare var wx: {
     reportAnalytics: Function;
-    reportmonitor: Function;
 }

@@ -11,7 +11,7 @@ export interface IPerformance {
      * @returns id
      */
     start(action: string, param?: any): number;
-    // stop(id:number,data?:any);
+    stop(id:number,extension?:any):void;
     // clear(id:number);
 }
 

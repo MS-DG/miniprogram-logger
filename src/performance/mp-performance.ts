@@ -20,17 +20,22 @@ export class WxMpPerformance implements IPerformance {
         this.Extension = extension;
     }
 
-    public log(action: string, duration: number, parameter?: any, extension?: any): void {
-        const json: PerformanceObject = {
-            id: guid(),
-            action: action,
-            time: duration,
-            record_time: new Date().getTime(),
-            correlation_id: this.CorrelationId,
-            param: stringify(parameter),
-            extension: stringify(extension || this.Extension),
-            user: stringify(this.User),
-        };
+    public log(action: string, duration: number, parameter?: any, extension?: any): void;
+    public log(data: any): void;
+    //  {
+    //     const json: PerformanceObject = {
+    //         id: guid(),
+    //         action: action,
+    //         time: duration,
+    //         record_time: new Date().getTime(),
+    //         correlation_id: this.CorrelationId,
+    //         param: stringify(parameter),
+    //         extension: stringify(extension || this.Extension),
+    //         user: stringify(this.User),
+    //     };
+    //     wx.reportAnalytics(this.TableName, json);
+    // }
+    public log(data: any): void {
         wx.reportAnalytics(this.TableName, json);
     }
 
@@ -40,11 +45,27 @@ export class WxMpPerformance implements IPerformance {
         return this.Id++;
     }
 
-    public stop(id:number): void{
-        const info =this.Stopwatch.get(id);
-        
+    public stop(id: number, extension?: any): boolean {
+        const info = this.Stopwatch.get(id);
+        if (!info) {
+            return false;
+        }
+
+        const [start, data] = info;
+        if (arguments.length > 1) {
+            // 设置 extens 字段
+            data.extension = extension;
+        }
+        data.time = (new Date as any as number) - (start as any as number);
+        this.log(data);
+        return this.clear(id);
+
     }
-    
+
+    public clear(id: number): boolean {
+        return true;
+    }
+
 }
 declare var wx: {
     reportAnalytics: Function;

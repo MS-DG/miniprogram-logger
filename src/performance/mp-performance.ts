@@ -1,34 +1,51 @@
 import { IPerformance, PerformanceObject } from "./IPerformance"
-import { Common } from "../common";
+import { guid, stringify } from "../common";
 
 export class WxMpPerformance implements IPerformance {
-    
+
+
     public readonly TableName: string;
 
-    public CorrelationId: string;
+    public CorrelationId?: string;
 
-    public Extension: any;
+    public Extension?: any;
+
+    public User: any;
+
+    private Id = 0;
+    private readonly Stopwatch = new Map<number, [Date, any]>();
 
     constructor(tableName: string, extension?: any) {
         this.TableName = tableName;
-        this.CorrelationId = Common.NewGuid();
         this.Extension = extension;
     }
 
-    public log(action: string, duration: number, parameter?: any): void {
-        let json: PerformanceObject = {
-            id: Common.NewGuid(),
-            timestamp: new Date().toUTCString(),
-            correlation_id: this.CorrelationId,
+    public log(action: string, duration: number, parameter?: any, extension?: any): void {
+        const json: PerformanceObject = {
+            id: guid(),
             action: action,
-            duration: duration,
-            parameter: parameter,
-            extension: this.Extension,
+            time: duration,
+            record_time: new Date().getTime(),
+            correlation_id: this.CorrelationId,
+            param: stringify(parameter),
+            extension: stringify(extension || this.Extension),
+            user: stringify(this.User),
         };
         wx.reportAnalytics(this.TableName, json);
     }
-}
 
+    public start(action: string, param?: any): number;
+    public start(): number {
+        this.Stopwatch.set(this.Id, [new Date, { ...arguments }])
+        return this.Id++;
+    }
+
+    public stop(id:number): void{
+        const info =this.Stopwatch.get(id);
+        
+    }
+    
+}
 declare var wx: {
     reportAnalytics: Function;
 }

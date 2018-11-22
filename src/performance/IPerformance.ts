@@ -1,7 +1,7 @@
 export interface IPerformance {
     TableName: string;
-    CorrelationId: string;
-    Extension: any;
+    CorrelationId?: string;
+    Extension?: any;
     log(action: string, duration: number, parameter?: any): void;
 
     /**
@@ -10,17 +10,18 @@ export interface IPerformance {
      * @param param
      * @returns id
      */
-    // start(action: string, param?: any): number;
+    start(action: string, param?: any): number;
     // stop(id:number,data?:any);
     // clear(id:number);
 }
 
 export interface PerformanceObject {
     id: string;
-    timestamp: string;
-    correlation_id: string;
+    record_time: number;
+    correlation_id?: string;
     action: string;
-    duration: number;
-    parameter?: string;
+    time: number;
+    user?: string
+    param?: string;
     extension?: string;
 }

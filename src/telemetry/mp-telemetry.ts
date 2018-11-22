@@ -1,4 +1,4 @@
-import { ITelemetry, UserInfo } from "./ITelemetry"
+import { ITelemetry, UserInfo, TelemetryObject } from "./ITelemetry"
 import { Common } from "../common"
 
 export class WxMpTelemetry implements ITelemetry {
@@ -7,33 +7,29 @@ export class WxMpTelemetry implements ITelemetry {
 
     public readonly UserInfo: UserInfo;
 
-    public readonly Extension: any;
-
-    private extensionJsonStr: string;
+    public Extension: any;
 
     public CorrelationId: string;
 
-    constructor(tableName: string, userInfo: UserInfo, extension?: any, transfrom?: Function, correlationId: string = "") {
+    constructor(tableName: string, userInfo: UserInfo, extension?: any, correlationId: string = "") {
         this.TableName = tableName;
         this.UserInfo = userInfo;
-        this.Extension = transfrom ? transfrom(extension) : extension
-        this.extensionJsonStr = typeof(extension) != "string" ? JSON.stringify(extension) : extension;
+        this.Extension = extension
         this.CorrelationId = correlationId;
     }
 
     public log(action: string, parameter?: string, processTimeInMS?: number, correlationId: string = "") {
-        wx.reportAnalytics(
-            this.TableName, {
-                id: Common.NewGuid(),
-                action: action,
-                parameter: parameter,
-                extension: this.extensionJsonStr,
-                user_info: this.reassembleUserInfo(processTimeInMS, correlationId),
-            }
-        )
+        let json: TelemetryObject = {
+            id: Common.NewGuid(),
+            action: action,
+            parameter: parameter,
+            extension: this.Extension,
+            user_info: this.reassembleUserInfo(processTimeInMS, correlationId)
+        }   
+        wx.reportAnalytics(this.TableName, json);
     }
 
-    private reassembleUserInfo(processTimeInMS?: number, correlationId?: string): string {
+    private reassembleUserInfo(processTimeInMS?: number, correlationId?: string): any {
         let info : object = {
             app_name: this.UserInfo.app_name,
             app_id: this.UserInfo.app_id,
@@ -43,7 +39,7 @@ export class WxMpTelemetry implements ITelemetry {
             debug_correlation_id: correlationId == "" ? this.CorrelationId : correlationId,
             timestamp: new Date().toUTCString(),
         };
-        return JSON.stringify(info);
+        return info;
     }
 
 }

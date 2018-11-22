@@ -1,23 +1,24 @@
+
+export type Dictionary = { [key: string]: string | number };
+
 export interface ILogger {
-    TableName:string;
-    LogLevel: string;
+    TableName: string;
     CorrelationId: string;
-    Extension: any;
-    transform: Function;
-    log(config: LogConfig);
-    log(level: string, action: string, content?: any);
-    debug(action: string, content?: any);
-    info(action: string, content?: any);
-    warn(action: string, content?: any);
-    error(action: string, content?: any);
-    alert(action: string, content?: any);
+    FilterFields?: Dictionary;
+    LogManager?: any;
+    log(level: string, action: string, content: string, filterFields?: Dictionary): void;
+    debug(action: string, content: string, filterFields?: Dictionary): void;
+    info(action: string, content: string, filterFields?: Dictionary): void;
+    warn(action: string, content: string, filterFields?: Dictionary): void;
+    error(action: string, content: string, filterFields?: Dictionary): void;
 }
 
-export interface LogConfig {
+export interface LogObject {
+    id: string;
+    timestamp: string;
+    correlation_id: string;
     level: string;
     action: string;
-    CorrelationId?: string;
-    Data?: any;
-    content?: any;
-    transform?: Function;
+    content: string;
+    [key: string]: string | number;
 }

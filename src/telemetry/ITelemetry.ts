@@ -12,3 +12,11 @@ export interface UserInfo {
     open_id: string;
     union_id?: string;
 }
+
+export interface TelemetryObject {
+    id: string;
+    action: string;
+    parameter?: string;
+    extension?: string;
+    user_info: string;
+}

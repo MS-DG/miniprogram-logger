@@ -1,5 +1,5 @@
 import { ILogger, Dictionary, LogObject } from "./ILogger"
-import { Common } from "../common";
+import { guid } from "../common";
 
 export class WxMpLogger implements ILogger {
 
@@ -13,7 +13,7 @@ export class WxMpLogger implements ILogger {
 
     constructor(tableName: string, filterFields?: Dictionary, logManager?: any) {
         this.TableName = tableName;
-        this.CorrelationId = Common.NewGuid();
+        this.CorrelationId = guid();
         this.FilterFields = filterFields;
         this.LogManager = logManager;
     }
@@ -29,7 +29,7 @@ export class WxMpLogger implements ILogger {
             }
         }
         let json: LogObject = {
-            id: Common.NewGuid(),
+            id: guid(),
             timestamp: new Date().toUTCString(),
             correlation_id: this.CorrelationId,
             level: level,

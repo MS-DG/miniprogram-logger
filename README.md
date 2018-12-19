@@ -49,17 +49,17 @@ npm i miniprogram-logger -S
 
 #### WxMpLogger
 ```ts
-let logger: WxMpLogger = new WxMpLogger("logger", { extension1: "extension1", extension2: 2 });
+const logger: WxMpLogger = new WxMpLogger("logger", { extension1: "extension1", extension2: 2 }, wx.getLogManager());
 logger.debug("action1", "content1", { extension3: "extension3" });
 ```
 #### WxMpTelemetry
 ```ts
-let telemetry: WxMpTelemetry = new WxMpTelemetry("telemetry", { app_id: "1", app_name: "2", open_id: "3", union_id: "4" }, { a: "aaa", b: "bbb" }, "11111-22222-33333");
+const telemetry: WxMpTelemetry = new WxMpTelemetry("telemetry", { app_id: "1", app_name: "2", open_id: "3", union_id: "4" }, { a: "aaa", b: "bbb" }, "11111-22222-33333");
 telemetry.log("action1", "parameter1", 10);
 ```
 #### WxMpPerformance
 ```ts
-let performance: WxMpPerformance = new WxMpPerformance("performance", { extension1: "extension1", extension2: "extension2" });
+const performance: WxMpPerformance = new WxMpPerformance("performance", { extension1: "extension1", extension2: "extension2" });
 telemetry.log("action1", "parameter1", 10);
 ```
 

@@ -1,12 +1,13 @@
+/// <reference lib="es2015"/>
 import { IPerformance, PerformanceParam, TransformFunction } from "./IPerformance"
-import { guid, stringify } from "../common";
+import { utils ,wx} from "../common";
 
 
 function defaultTransform(data: PerformanceParam): { [key: string]: string | number | undefined } {
-    data.id = guid();
-    data.user = stringify(data.user);
-    data.param = stringify(data.param);
-    data.extension = stringify(data.extension);
+    data.id = utils.guid();
+    data.user = utils.stringify(data.user);
+    data.param = utils.stringify(data.param);
+    data.extension = utils.stringify(data.extension);
     data.record_time = <any>data.record_time!.getTime();
     return data;
 }
@@ -134,6 +135,3 @@ export class WxMpPerformance implements IPerformance {
 
 }
 
-declare var wx: {
-    reportAnalytics: Function;
-}

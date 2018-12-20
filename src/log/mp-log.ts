@@ -1,5 +1,5 @@
 import { ILogger, Dictionary, LogObject } from "./ILogger"
-import { guid } from "../common";
+import { utils, wx } from "../common";
 
 export class WxMpLogger implements ILogger {
 
@@ -13,12 +13,12 @@ export class WxMpLogger implements ILogger {
 
     constructor(tableName: string, filterFields?: Dictionary, logManager?: any) {
         this.TableName = tableName;
-        this.CorrelationId = guid();
+        this.CorrelationId = utils.guid();
         this.FilterFields = filterFields;
         this.LogManager = logManager;
     }
 
-    public log(level: string, action: string, content: string, filterFields?: Dictionary): void {
+    public log(level: 'error'|'info'|'', action: string, content: string, filterFields?: Dictionary): void {
         let fields: Dictionary = {};
         if (this.FilterFields != undefined) {
             fields = JSON.parse(JSON.stringify(this.FilterFields));
@@ -29,7 +29,7 @@ export class WxMpLogger implements ILogger {
             }
         }
         let json: LogObject = {
-            id: guid(),
+            id: utils.guid(),
             timestamp: new Date().toUTCString(),
             correlation_id: this.CorrelationId,
             level: level,
@@ -39,23 +39,18 @@ export class WxMpLogger implements ILogger {
         for (let key in fields) {
             json[key] = fields[key];
         }
-        wx.reportAnalytics(this.TableName, json);
-        if (this.LogManager != undefined) {
-            switch (level) {
-                case "debug":
-                    this.LogManager.debug(json);
-                    break;
-                case "info":
-                    this.LogManager.info(json);
-                    break;
-                case "warn":
-                    this.LogManager.warn(json);
-                    break;
-                case "error":
-                    this.LogManager.warn("Error", json);
-                    break;
+        // LogManager
+        if (this.LogManager) {
+            if (level === "error") {
+                this.LogManager.warn.call(this.LogManager, '[ERROR]', action, content, filterFields);
+            } else {
+                this.LogManager[level].apply(this.LogManager, Array.from(arguments));
             }
         }
+        // report
+        wx.reportAnalytics(this.TableName, json);
+        // console
+        console[level as "log"]
 
     }
 
@@ -76,6 +71,3 @@ export class WxMpLogger implements ILogger {
     }
 }
 
-declare var wx: {
-    reportAnalytics: Function;
-}

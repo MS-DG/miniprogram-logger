@@ -1,5 +1,16 @@
-import { ILogger, Dictionary, LogObject } from "./ILogger"
+import { ILogger, Dictionary } from "./ILogger"
 import { utils, wx } from "../common";
+
+export interface LogObject {
+    id: string;
+    timestamp: string;
+    correlation_id: string;
+    level: string;
+    action: string;
+    content: string;
+    [key: string]: string | number;
+}
+
 
 export class WxMpLogger implements ILogger {
 

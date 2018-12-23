@@ -1,5 +1,5 @@
 import { ITelemetry, UserInfo, TelemetryObject } from "./ITelemetry"
-import { guid } from "../common"
+import { utils } from "../common"
 
 export class WxMpTelemetry implements ITelemetry {
 
@@ -20,7 +20,7 @@ export class WxMpTelemetry implements ITelemetry {
 
     public log(action: string, parameter?: string, processTimeInMS?: number, correlationId: string = "") {
         let json: TelemetryObject = {
-            id: guid(),
+            id: utils.guid(),
             action: action,
             parameter: parameter,
             extension: this.Extension,

@@ -92,7 +92,7 @@ export class ReportAnalytics<T extends Dictionary> implements IPerformance {
         data.correlation_id = data.correlation_id || this.CorrelationId;
         data.record_time = data.record_time || new Date();
 
-        wx.reportAnalytics(this.TableName, this.Transform(data));
+        wx.reportAnalytics(this.TableName,data);
     }
 
 

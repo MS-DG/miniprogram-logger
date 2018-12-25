@@ -29,7 +29,7 @@ export class WxMpLogger implements ILogger {
         this.LogManager = logManager;
     }
 
-    public log(level: 'error'|'info'|'', action: string, content: string, filterFields?: Dictionary): void {
+    public log(level: string, action: string, content: string, filterFields?: Dictionary): void {
         let fields: Dictionary = {};
         if (this.FilterFields != undefined) {
             fields = JSON.parse(JSON.stringify(this.FilterFields));

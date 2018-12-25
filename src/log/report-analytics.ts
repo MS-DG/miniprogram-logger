@@ -1,5 +1,8 @@
 import { ILogger, LogLevel } from "./ILogger";
-import { utils } from "../common";
+import { utils } from "../common/utils";
+
+type RemoveFirst<T extends any[]> = ((...args: T) => void) extends ((a: any, ...rest: infer Rest) => void) ? Rest : never;
+
 
 export interface Dictionary {
     [key: string]: string | number | undefined

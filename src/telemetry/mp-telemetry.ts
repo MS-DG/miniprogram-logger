@@ -1,5 +1,5 @@
 import { ITelemetry, UserInfo, TelemetryObject } from "./ITelemetry"
-import { utils } from "../common"
+import { utils } from "../common/utils"
 
 export class WxMpTelemetry implements ITelemetry {
 

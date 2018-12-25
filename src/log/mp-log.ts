@@ -1,5 +1,5 @@
 import { ILogger, Dictionary } from "./ILogger"
-import { utils, wx } from "../common";
+import { utils, wx } from "../common/utils";
 
 export interface LogObject {
     id: string;

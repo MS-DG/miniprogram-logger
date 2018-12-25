@@ -1,6 +1,6 @@
 /// <reference lib="es2015"/>
 import { IPerformance, PerformanceParam, TransformFunction } from "./IPerformance"
-import { utils ,wx} from "../common";
+import { utils ,wx} from "../common/utils";
 
 
 function defaultTransform(data: PerformanceParam): { [key: string]: string | number | undefined } {

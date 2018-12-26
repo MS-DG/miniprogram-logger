@@ -1,64 +1,37 @@
 /// <reference lib="es2015"/>
 import { IPerformance } from "./IPerformance";
-import { Reporter } from "../common/reporter";
+import { Reporter, Dictionary } from "../common/reporter";
+import { utils } from "../common/utils";
 
-export interface Dictionary {
-    [key: string]: string | number | undefined
-};
-
-// export interface PerformanceParam {
-//     [key: string]: any;
-//     action: string;
-//     time: number
-//     correlation_id?: string;
-//     user?: any
-//     param?: any;
-//     extension?: any;
-//     record_time?: Date;
-// }
-
-// export type TransformFunction = (data: PerformanceParam) => { [key: string]: string | number | undefined };
-
-// function defaultTransform(data: PerformanceParam): { [key: string]: string | number | undefined } {
-//     data.id = utils.guid();
-//     data.user = utils.stringify(data.user);
-//     data.param = utils.stringify(data.param);
-//     data.extension = utils.stringify(data.extension);
-//     data.record_time = <any>data.record_time!.getTime();
-//     return data;
-// }
-
-// {
-//     /**
-//      * 客户端信息
-//      */
-//     public User?: any;
-//     /**
-//      * 额外数据
-//      */
-//     public Extension?: any;
-//     /**
-//      * 关联ID
-//      */
-//     public CorrelationId?: string;
-// }
-
-interface PerformanceParam extends Dictionary {
+export interface PerformanceObject extends Dictionary {
     /** 操作 */
     action?: string,
     /** 时间 */
     time?: number,
 }
 
+/**
+ * 默认Performance日志对象转换函数
+ * 字段中注入`id`和`record_time`
+ * @param data PerformanceObject
+ */
+export function PerformanceTransformFunction<T extends PerformanceObject =PerformanceObject>(data: T): Dictionary {
+    if (typeof data === "object") {
+        data.id = data.id || utils.guid();
+        data.record_time = data.record_time || Date.now();
+    }
+    return data;
+}
+
 export class ReportAnalytics<
-    T extends PerformanceParam,
+    T extends PerformanceObject,
     TValues extends T[keyof T][],
     TKeys extends (keyof T)[]= (keyof T)[]>
     extends Reporter<T, TValues, TKeys>
     implements IPerformance {
 
     private Id = 0;
-    private readonly Stopwatch = new Map<number, [Date, Partial<T>]>();
+    private readonly Stopwatch = new Map<number, [number, Partial<T>]>();
 
     constructor(tableName: string, fields?: TKeys, context?: Partial<T>) {
         super(tableName, fields || ['action', 'time'] as TKeys, context);
@@ -70,24 +43,15 @@ export class ReportAnalytics<
      * @param time 耗时单位毫秒
      * @param context 其它数据
      */
-    public log(action: string, time: number, context?: any): void;
+    public log(action: string, time: number, ...args: RemoveFisrt2<TValues>): void;
     /**
      * 快速记录性能日志
      * @param data PerformanceParam
      */
     public log(data: T): void;
     public log(): void {
-        if (arguments.length === 0) {
-            console.error('WxMpPerformance.log need 1 or more parameters');
-            return;
-        }
-        // 单参数object
-        // 或者多参数，安参数表赋值
-        const data: T = (arguments.length === 1) ? arguments[0] : {
-            [this.Fields[0]]: arguments[0],
-            [this.Fields[1]]: arguments[1]
-        }
-        this.report(Object.assign(data, arguments[2]));
+        //@ts-ignore
+        this.report.apply(this, arguments);
     }
 
 
@@ -102,10 +66,10 @@ export class ReportAnalytics<
     public start(): number {
         if ((arguments.length === 1) && typeof arguments[0] === "object") {
             //对象参数
-            this.Stopwatch.set(this.Id, [new Date, arguments[0]]);
+            this.Stopwatch.set(this.Id, [Date.now(), arguments[0]]);
         } else {
             //多参数
-            this.Stopwatch.set(this.Id, [new Date, Object.assign(arguments[1] || {}, { [this.Fields[0]]: arguments[0] })]);
+            this.Stopwatch.set(this.Id, [Date.now(), Object.assign(arguments[1] || {}, { [this.Fields[0]]: arguments[0] })]);
         }
         return this.Id++;
     }
@@ -122,7 +86,7 @@ export class ReportAnalytics<
         }
 
         const [start, data] = info;
-        Object.assign(data, context, { [this.Fields[1]]: (new Date as any) - (start as any) })
+        Object.assign(data, context, { [this.Fields[1]]: Date.now() - start });
         this.report(data as T);
         return this.clear(id);
     }
@@ -136,3 +100,5 @@ export class ReportAnalytics<
         return this.Stopwatch.delete(id);
     }
 }
+
+type RemoveFisrt2<T extends any[]> = ((...args: T) => void) extends ((a: any, b: any, ...rest: infer Rest) => void) ? Rest : never;

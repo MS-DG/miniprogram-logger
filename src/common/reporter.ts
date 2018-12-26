@@ -3,20 +3,19 @@ export interface Dictionary {
     [key: string]: string | number | any
 };
 
-declare var wx: {
-    reportAnalytics: (table: string, data: object) => void;
-}
 
-
-export type MapTTuple<Tkey, Tvalue> = {
-
-}
-
+/**
+ * 上报封装
+ */
 export class Reporter<
     TObject extends Dictionary,
-    TValueTuple extends TObject[keyof TObject][],
-    TKeyTuple extends (keyof TObject)[]= (keyof TObject)[]>
+    TValues extends TObject[keyof TObject][],
+    TKeys extends (keyof TObject)[]= (keyof TObject)[]>
 {
+    /**
+     * 上报转换函数
+     */
+    public TransformFunction?: (data: TObject) => any;
     /**
      * 存储的表名
      */
@@ -28,9 +27,9 @@ export class Reporter<
     /**
      * 字段参数映射关系
      */
-    protected readonly Fields: TKeyTuple;
+    protected readonly Fields: TKeys;
 
-    constructor(table: string, fields: TKeyTuple, context?: Partial<TObject>) {
+    constructor(table: string, fields: TKeys, context?: Partial<TObject>) {
         this.TableName = table;
         this.Fields = fields;
         this.Context = context || {};
@@ -40,13 +39,17 @@ export class Reporter<
      * 
      * @param args 上报的参数,各个参数分开,上报
      */
-    public report(...args: TValueTuple): void;
+    protected report(...args: TValues): void;
     /**
      * 上报 Object
      * @param data 
      */
-    public report(data: TObject): void;
-    public report() {
+    protected report(data: TObject): void;
+    protected report() {
+        if (arguments.length === 0) {
+            console.error('report need 1 or more parameters');
+            return;
+        }
         const data = this.Context;
         if (arguments.length === 1 && typeof arguments[0] === "object") {
             for (let key in arguments[0]) {
@@ -60,7 +63,7 @@ export class Reporter<
                 data[this.Fields[n] as string] = utils.stringify(arguments[n]);
             }
         }
-        wx.reportAnalytics(this.TableName, data);
+        wx.reportAnalytics(this.TableName, this.TransformFunction ? this.TransformFunction(data as TObject) : data);
     }
 
     /**
@@ -84,4 +87,8 @@ export class Reporter<
         }
         return this;
     }
+}
+
+declare var wx: {
+    reportAnalytics: (table: string, data: object) => void;
 }

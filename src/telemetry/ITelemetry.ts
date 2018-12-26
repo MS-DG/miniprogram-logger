@@ -1,6 +1,6 @@
 
 export interface ITelemetry {
-    log(action: string, parameter?: string, processTimeInMS?: number, correlationId?: string): void;
+    record(action: string, ...args: any[]): void;
 }
 
 export interface UserInfo {

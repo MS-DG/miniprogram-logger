@@ -28,7 +28,7 @@ export class Console<TLog=LogObject, TTime=PerformanceObject, TTelemetry=Telemet
             this.Counters.forEach(function (v) { v.count.apply(v, args as any) });
         }
     }
-    
+
     debug(action: string, content?: any, ...optionalParams: any[]): void;
     debug(data: TLog): void;
     debug() {

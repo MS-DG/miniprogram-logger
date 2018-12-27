@@ -27,7 +27,7 @@ export function TelemetryTransformFunction<T extends TelemetryObject =TelemetryO
 }
 
 type TelemetryKeys = ['action', 'parameter', 'extension', 'user_info'];
-type TelemetryValues = [string, string, Dictionary, UserInfo];
+type TelemetryValues = [string, any, Dictionary, UserInfo];
 
 export class ReportAnalytics
     extends Reporter<TelemetryObject, TelemetryValues, TelemetryKeys>

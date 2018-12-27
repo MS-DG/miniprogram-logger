@@ -1,5 +1,5 @@
 /// <reference lib="es2015"/>
-import { IPerformance, PerformanceParam, TransformFunction } from "./IPerformance"
+import { ITimer, PerformanceParam, TransformFunction } from "./ITimer"
 import { utils ,wx} from "../common/utils";
 
 
@@ -12,7 +12,7 @@ function defaultTransform(data: PerformanceParam): { [key: string]: string | num
     return data;
 }
 
-export class WxMpPerformance implements IPerformance {
+export class WxMpPerformance implements ITimer {
 
     public readonly TableName: string;
 
@@ -106,7 +106,7 @@ export class WxMpPerformance implements IPerformance {
      * @param id 
      * @param extension 
      */
-    public stop(id: number, extension?: any): boolean {
+    public end(id: number, extension?: any): boolean {
         const info = this.Stopwatch.get(id);
         if (!info) {
             return false;
@@ -121,7 +121,7 @@ export class WxMpPerformance implements IPerformance {
         data.time = (now as any) - (start as any);
         data.record_time = now;
         this.log(data);
-        return this.clear(id);
+        return this.remove(id);
     }
 
     /**
@@ -129,7 +129,7 @@ export class WxMpPerformance implements IPerformance {
      * @param id
      * @returns 不存在返回false 
      */
-    public clear(id: number): boolean {
+    public remove(id: number): boolean {
         return this.Stopwatch.delete(id);
     }
 

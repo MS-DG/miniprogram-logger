@@ -1,9 +1,8 @@
-import { IMonitor } from "./IMonitor";
+import { ICounter } from "./ICounter";
 
-export class ReportMonitor implements IMonitor {
-    count(label: string, value: number = 1): this {
-        wx.reportMonitor(label, value)
-        return this;
+export class ReportMonitor implements ICounter {
+    count(label: string, value: number = 1): void {
+        wx.reportMonitor(label, value);
     }
 }
 

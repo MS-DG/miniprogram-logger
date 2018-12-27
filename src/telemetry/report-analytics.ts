@@ -49,22 +49,22 @@ export class ReportAnalytics
      */
     public record(data: TelemetryObject): void;
     public record(): void {
-        if (arguments.length === 0) {
-            console.error('ReportAnalytics.log need 1 or more parameters');
-            return;
-        }
-        // 单参数object
-        // 或者多参数，安参数表赋值
-        const data: TelemetryObject = (arguments.length === 1 && typeof arguments[0] === 'object') ? arguments[0] : { action: arguments[0] };
-        if (arguments.length > 1) {
-            data.parameter = arguments[1];
-        }
-        if (arguments.length > 2) {
-            data.extension = arguments[2]
-        }
-        if (arguments.length > 3) {
-            data.user_info = arguments[3]
-        }
-        this.report(data);
+        // if (arguments.length === 0) {
+        //     console.error('ReportAnalytics.log need 1 or more parameters');
+        //     return;
+        // }
+        // // 单参数object
+        // // 或者多参数，安参数表赋值
+        // const data: TelemetryObject = (arguments.length === 1 && typeof arguments[0] === 'object') ? arguments[0] : { action: arguments[0] };
+        // if (arguments.length > 1) {
+        //     data.parameter = arguments[1];
+        // }
+        // if (arguments.length > 2) {
+        //     data.extension = arguments[2]
+        // }
+        // if (arguments.length > 3) {
+        //     data.user_info = arguments[3]
+        // }
+        this.report.apply(this, arguments as any);
     }
 }

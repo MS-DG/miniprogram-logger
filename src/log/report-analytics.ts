@@ -3,7 +3,7 @@ import { utils } from "../common/utils";
 import { Reporter, Dictionary } from "../common/reporter";
 
 export interface LogObject extends Dictionary {
-    level: LogLevel;
+    level?: LogLevel;
     action?: string;
     content?: any;
     id?: string;
@@ -21,8 +21,12 @@ export type LogValues = [LogLevel, string, any]
  */
 export function LogTransformFunction<T extends LogObject =LogObject>(data: T): Dictionary {
     if (typeof data === "object") {
-        data.id = utils.guid();
-        data.record_time = Date.now();
+        if (!data.id) {
+            data.id = utils.guid();
+        }
+        if (!data.record_time) {
+            data.record_time = Date.now();
+        }
     }
     return data;
 }
@@ -99,8 +103,7 @@ export class ReportAnalytics<T extends LogObject, TValues extends T[keyof T][]=L
     public log(level: TValues[0], action: TValues[1], content?: TValues[2], ...args: RemoveFirst3<TValues>): void;
     public log(context: Partial<T>): void;
     public log(): void {
-        //@ts-ignore
-        this.report.apply(this, arguments);
+        this.report.apply(this, arguments as any);
     }
 
     private logByLevel(level: TValues[0], args: IArguments) {
@@ -109,10 +112,8 @@ export class ReportAnalytics<T extends LogObject, TValues extends T[keyof T][]=L
             context.level = level;
             return this.report(context);
         } else {
-            const arg = Array.from(args);
-            arg.unshift(level);
-            // @ts-ignore
-            return this.report.apply(this, arg);
+            Array.prototype.unshift.call(args, level);
+            return this.report.apply(this, args as any);
         }
     }
 }

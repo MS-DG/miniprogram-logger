@@ -21,7 +21,7 @@ export class LogManager implements ILogger {
             this.manager = wxLogManager || wx.getLogManager();
         }
     }
-    
+
     debug(...args: any[]): void {
         return this.log('debug', ...args);
     }
@@ -45,7 +45,7 @@ export class LogManager implements ILogger {
                     arguments[0] = '[ERROR]';
                     this.manager.log.call(this.manager, arguments);
                 } else {
-                    this.manager[level].call(this.manager, Array.from(arguments).slice(1));
+                    this.manager[level].call(this.manager, Array.prototype.slice.call(arguments, 1));
                 }
             }
         } else {

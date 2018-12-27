@@ -1,6 +1,6 @@
 
 export interface ILogger {
-    logLevels: LogLevel[];
+    logLevels?: LogLevel[];
     log(level: string, ...args: any[]): void;
     debug(...args: any[]): void;
     info(...args: any[]): void;

@@ -1,5 +1,5 @@
 /// <reference lib="es2015"/>
-import { IPerformance } from "./IPerformance";
+import { ITimer } from "./ITimer";
 import { Reporter, Dictionary } from "../common/reporter";
 import { utils } from "../common/utils";
 
@@ -28,10 +28,10 @@ export class ReportAnalytics<
     TValues extends T[keyof T][],
     TKeys extends (keyof T)[]= (keyof T)[]>
     extends Reporter<T, TValues, TKeys>
-    implements IPerformance {
+    implements ITimer {
 
     private Id = 0;
-    private readonly Stopwatch = new Map<number, [number, Partial<T>]>();
+    private readonly Stopwatch = new Map<number | string, [number, Partial<T>]>();
 
     constructor(tableName: string, fields?: TKeys, context?: Partial<T>) {
         super(tableName, fields || ['action', 'time'] as TKeys, context);
@@ -54,6 +54,24 @@ export class ReportAnalytics<
         this.report.apply(this, arguments);
     }
 
+    /**
+     * 
+     * @param label - 唯一标签,结束时使用同样标签,
+     * @param context - 记录上下文信息，如果未设置action则使用label作为action
+     */
+    public time(label: string, context?: Partial<T>): void {
+        this.Stopwatch.set(label, [Date.now(), Object.assign({ [this.Fields[0]]: arguments[0] }, context)])
+    }
+    /**
+     * 
+     * @param label - 唯一标签,与开始对应
+     * @param context - 记录上下文信息，如果未设置action则使用label作为action
+     */
+    public timeEnd(label: string, context?: Partial<T>): void {
+        if (!this.end(label as any, context)) {
+            console.error('timer label not found', label);
+        }
+    }
 
     /**
      * 开始计时
@@ -79,7 +97,7 @@ export class ReportAnalytics<
      * @param id 
      * @param context 
      */
-    public stop(id: number, context?: Partial<T>): boolean {
+    public end(id: number, context?: Partial<T>): boolean {
         const info = this.Stopwatch.get(id);
         if (!info) {
             return false;
@@ -88,7 +106,7 @@ export class ReportAnalytics<
         const [start, data] = info;
         Object.assign(data, context, { [this.Fields[1]]: Date.now() - start });
         this.report(data as T);
-        return this.clear(id);
+        return this.remove(id);
     }
 
     /**
@@ -96,7 +114,7 @@ export class ReportAnalytics<
      * @param id
      * @returns 不存在返回false 
      */
-    public clear(id: number): boolean {
+    public remove(id: number | string): boolean {
         return this.Stopwatch.delete(id);
     }
 }

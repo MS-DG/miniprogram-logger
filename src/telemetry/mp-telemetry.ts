@@ -18,7 +18,7 @@ export class WxMpTelemetry implements ITelemetry {
         this.CorrelationId = correlationId;
     }
 
-    public log(action: string, parameter?: string, processTimeInMS?: number, correlationId: string = "") {
+    public record(action: string, parameter?: string, processTimeInMS?: number, correlationId: string = "") {
         let json: TelemetryObject = {
             id: utils.guid(),
             action: action,

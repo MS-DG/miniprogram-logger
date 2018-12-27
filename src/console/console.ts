@@ -98,6 +98,20 @@ export class Console<TLog=LogObject, TTime=PerformanceObject, TTelemetry=Telemet
     }
 
     /**
+     * 一次记录时间(性能)日志
+     * @param action - 操作
+     * @param time - 时间
+     * @param args - 其它参数
+     */
+    perfLog(action: string, time: number, ...args: any): void;
+    perfLog(data: TTime): void;
+    perfLog() {
+        if (this.Timers) {
+            const args = arguments;
+            this.Timers.forEach(function (v) { v.log.apply(v, args as any) });
+        }
+    }
+    /**
      * 开始计时
      * @param label - 计时标签
      * @param context - 保存上下文信息
@@ -108,7 +122,7 @@ export class Console<TLog=LogObject, TTime=PerformanceObject, TTelemetry=Telemet
         }
     }
     /**
-     * 开始计时
+     * 结束计时
      * @param label - 计时标签
      * @param context - 保存上下文信息
      */

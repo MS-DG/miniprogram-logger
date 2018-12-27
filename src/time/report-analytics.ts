@@ -4,6 +4,8 @@ import { Reporter, Dictionary } from "../common/reporter";
 import { utils } from "../common/utils";
 
 export interface PerformanceObject extends Dictionary {
+    /** id */
+    id?: string,
     /** 操作 */
     action?: string,
     /** 时间 */

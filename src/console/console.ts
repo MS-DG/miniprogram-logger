@@ -1,21 +1,28 @@
-import { ICounter } from "../count/ICounter";
-import { ILogger, LogLevel } from "../log/ILogger";
+import { ICounter } from "../count/";
+import { ILogger, LogLevel } from "../log/";
 import { ITimer } from "../time/ITimer";
-import { ITelemetry } from "../telemetry/ITelemetry";
-import { TelemetryObject } from "../telemetry/report-analytics";
-import { PerformanceObject } from "../time/report-analytics";
-import { LogObject } from "../log/report-analytics";
+import { ITelemetry } from "../telemetry/";
+import { TelemetryObject } from "../telemetry/";
+import { PerformanceObject } from "../time/";
+import { LogObject } from "../log/";
 
 export type ConsoleLevel = LogLevel | 'time' | 'telemetry';
 
-export class Console<TLog=LogObject, TTime=PerformanceObject, TTelemetry=TelemetryObject> {
-    public readonly Counters: ICounter[] = [console];
+export class ConsoleManager<TLog=LogObject, TTime=PerformanceObject, TTelemetry=TelemetryObject> {
+    
+    public readonly Counters: ICounter[];
 
-    public readonly Loggers: ILogger[] = [console];
+    public readonly Loggers: ILogger[];
 
-    public readonly Timers: ITimer[] = [console];
+    public readonly Timers: ITimer[];
 
     public readonly Telemetry: ITelemetry[] = [];
+
+    constructor(c: Console) {
+        this.Counters = c ? [c] : [];
+        this.Loggers = c ? [c] : [];
+        this.Timers = c ? [c] : [];
+    }
 
     /**
      * 计数
@@ -29,7 +36,14 @@ export class Console<TLog=LogObject, TTime=PerformanceObject, TTelemetry=Telemet
         }
     }
 
-    debug(action: string, content?: any, ...optionalParams: any[]): void;
+    /**
+     * 记录调试日志
+     * @param action - 操作
+     * @param content - 记录内容
+     * @param correlationId - 关联ID
+     * @param optionalParams - 其它参数
+     */
+    debug(action: string, content?: any, correlationId?: string, ...optionalParams: any[]): void;
     debug(data: TLog): void;
     debug() {
         if (this.Loggers) {
@@ -38,16 +52,14 @@ export class Console<TLog=LogObject, TTime=PerformanceObject, TTelemetry=Telemet
         }
     }
 
-    error(action: string, content?: any, ...optionalParams: any[]): void;
-    error(data: TLog): void;
-    error(): void {
-        if (this.Loggers) {
-            const args = arguments;
-            this.Loggers.forEach(function (v) { v.error.apply(v, args as any) });
-        }
-    }
-
-    info(action: string, content?: any, ...optionalParams: any[]): void;
+    /**
+     * 记录日志信息
+     * @param action - 操作
+     * @param content - 记录内容
+     * @param correlationId - 关联ID
+     * @param optionalParams - 其它参数
+     */
+    info(action: string, content?: any, correlationId?: string, ...optionalParams: any[]): void;
     info(data: TLog): void;
     info(): void {
         if (this.Loggers) {
@@ -56,7 +68,14 @@ export class Console<TLog=LogObject, TTime=PerformanceObject, TTelemetry=Telemet
         }
     }
 
-    warn(action: string, content?: any, ...optionalParams: any[]): void;
+    /**
+     * 记录警告日志
+     * @param action - 操作
+     * @param content - 记录内容
+     * @param correlationId - 关联ID
+     * @param optionalParams - 其它参数
+     */
+    warn(action: string, content?: any, correlationId?: string, ...optionalParams: any[]): void;
     warn(data: TLog): void;
     warn(): void {
         if (this.Loggers) {
@@ -64,8 +83,23 @@ export class Console<TLog=LogObject, TTime=PerformanceObject, TTelemetry=Telemet
             this.Loggers.forEach(function (v) { v.warn.apply(v, args as any) });
         }
     }
+    /**
+     * 记录错误日志
+     * @param action - 操作
+     * @param content - 记录内容
+     * @param correlationId - 关联ID
+     * @param optionalParams - 其它参数
+     */
+    error(action: string, content?: any, correlationId?: string, ...optionalParams: any[]): void;
+    error(data: TLog): void;
+    error(): void {
+        if (this.Loggers) {
+            const args = arguments;
+            this.Loggers.forEach(function (v) { v.error.apply(v, args as any) });
+        }
+    }
 
-    log(level: ConsoleLevel, action: string, content?: any, ...optionalParams: any[]): void {
+    log(level: ConsoleLevel, action: string, content?: any, correlationId?: string, ...optionalParams: any[]): void {
         const args = arguments;
         if (level === 'time') {
             if (this.Timers) {

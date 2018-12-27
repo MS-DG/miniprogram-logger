@@ -4,11 +4,16 @@ import { Reporter, Dictionary } from "../common/reporter";
 import { utils } from "../common/utils";
 
 export interface TelemetryObject extends Dictionary {
-    id: string;
-    action: string;
-    parameter?: string;
-    extension?: Dictionary;
-    user_info?: UserInfo
+    /** 记录ID */
+    id?: string;
+    /** 记录操作 */
+    action?: string;
+    /** 参数 */
+    param?: string;
+    /** 扩展内容 */
+    extension?: TelemetryExtension;
+    /** 客户端数据 */
+    user_info?: UserInfo;
 }
 /**
  * 默认 Telemetry对象转换函数
@@ -17,7 +22,9 @@ export interface TelemetryObject extends Dictionary {
  */
 export function TelemetryTransformFunction<T extends TelemetryObject =TelemetryObject>(data: T): Dictionary {
     if (typeof data === "object") {
-        data.id = utils.guid();
+        if (!data.id) {
+            data.id = utils.guid();
+        }
         if (!data.extension) {
             data.extension = {};
         }
@@ -26,7 +33,7 @@ export function TelemetryTransformFunction<T extends TelemetryObject =TelemetryO
     return data;
 }
 
-type TelemetryKeys = ['action', 'parameter', 'extension', 'user_info'];
+type TelemetryKeys = ['action', 'param', 'extension', 'user_info'];
 type TelemetryValues = [string, any, Dictionary, UserInfo];
 
 export class ReportAnalytics
@@ -34,7 +41,7 @@ export class ReportAnalytics
     implements ITelemetry {
 
     constructor(tableName: string, context?: Partial<TelemetryObject>) {
-        super(tableName, ['action', 'parameter', 'extension', 'user_info'], context);
+        super(tableName, ['action', 'param', 'extension', 'user_info'], context);
     }
 
     /**
@@ -49,22 +56,15 @@ export class ReportAnalytics
      */
     public record(data: TelemetryObject): void;
     public record(): void {
-        // if (arguments.length === 0) {
-        //     console.error('ReportAnalytics.log need 1 or more parameters');
-        //     return;
-        // }
-        // // 单参数object
-        // // 或者多参数，安参数表赋值
-        // const data: TelemetryObject = (arguments.length === 1 && typeof arguments[0] === 'object') ? arguments[0] : { action: arguments[0] };
-        // if (arguments.length > 1) {
-        //     data.parameter = arguments[1];
-        // }
-        // if (arguments.length > 2) {
-        //     data.extension = arguments[2]
-        // }
-        // if (arguments.length > 3) {
-        //     data.user_info = arguments[3]
-        // }
         this.report.apply(this, arguments as any);
     }
+}
+
+interface TelemetryExtension extends Dictionary {
+    /** 关联ID */
+    debug_correlation_id?: string;
+    /** 处理时间 */
+    process_time?: number;
+    /** 时间戳 */
+    timestamp?: string | number;
 }

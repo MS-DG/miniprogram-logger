@@ -1,11 +1,15 @@
-import { ILogger, LogLevel, isLogLevel } from "./ILogger";
+import { ILogger, LogLevel } from "./ILogger";
 import { utils } from "../common/utils";
 import { Reporter, Dictionary } from "../common/reporter";
 
 export interface LogObject extends Dictionary {
+    /** 日志级别 */
     level?: LogLevel;
+    /** 操作 */
     action?: string;
+    /** 内容 */
     content?: any;
+    /** ID */
     id?: string;
     record_time?: number;
 }
@@ -45,7 +49,7 @@ export class ReportAnalytics<T extends LogObject, TValues extends T[keyof T][]=L
     /**
      * @example
      * ```
-     *  new ReportAnalytics<LogObject,[LogLevel,string,any]>('log',['id', 'record_time', 'level', 'action', 'content'])
+     *  new ReportAnalytics<LogObject,[LogLevel,string,any]>('logger',['level', 'action', 'content'])
      * ```
      * @param tableName - 上报的表名
      * @param fields - 字段列表,参数表对应,前三个分别是id,record_time,level对应的字段名称

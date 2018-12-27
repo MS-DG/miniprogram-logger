@@ -10,3 +10,4 @@ export interface UserInfo {
     union_id?: string;
 }
 
+

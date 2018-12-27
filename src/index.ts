@@ -23,7 +23,7 @@ export const defaultCounter = new CounterReportMonitor();
  */
 export const defaultLogManager = new LogManager();
 export const defaultLogReporter = new LogReporter<DefaultLogObject, [LogLevel, string, any, string]>(
-    'logger',
+    'log',
     ['level', 'action', 'content', 'correlation_id']
 );
 
@@ -63,7 +63,7 @@ export interface DefaultTimeObject extends PerformanceObject {
     /** 类型 */
     type?: string | number;
     /** 客户端数据用户数据(脱敏后),通过context设置 */
-    client?: any,
+    user?: any,
 }
 
 export {

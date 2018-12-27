@@ -1,5 +1,6 @@
 
 export interface ITelemetry {
+    setContext?(key: any, value?: any): any;
     record(action: string, ...args: any[]): void;
 }
 

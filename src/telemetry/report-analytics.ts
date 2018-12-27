@@ -9,11 +9,11 @@ export interface TelemetryObject extends Dictionary {
     /** 记录操作 */
     action?: string;
     /** 参数 */
-    param?: string;
+    param?: any;
     /** 扩展内容 */
     extension?: TelemetryExtension;
     /** 客户端数据 */
-    user_info?: UserInfo;
+    user?: UserInfo;
 }
 /**
  * 默认 Telemetry对象转换函数

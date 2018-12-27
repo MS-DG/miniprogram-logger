@@ -9,7 +9,7 @@ import { LogObject } from "../log/";
 export type ConsoleLevel = LogLevel | 'time' | 'telemetry';
 
 export class ConsoleManager<TLog=LogObject, TTime=PerformanceObject, TTelemetry=TelemetryObject> {
-    
+
     public readonly Counters: ICounter[];
 
     public readonly Loggers: ILogger[];
@@ -164,5 +164,14 @@ export class ConsoleManager<TLog=LogObject, TTime=PerformanceObject, TTelemetry=
         if (this.Timers) {
             this.Timers.forEach(function (v) { v.timeEnd(label, context) });
         }
+    }
+
+    /**
+     * 设置统一的上下文信息
+     */
+    setContext<T extends (keyof TTelemetry) & (keyof TTime) & (keyof TLog)>(key: T, value: TLog[T]): void {
+        this.Loggers && this.Loggers.forEach(function (v) { v.setContext && v.setContext(key, value) });
+        this.Telemetry && this.Telemetry.forEach(function (v) { v.setContext && v.setContext(key, value) });
+        this.Timers && this.Timers.forEach(function (v) { v.setContext && v.setContext(key, value) });
     }
 }

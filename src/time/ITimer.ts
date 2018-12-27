@@ -1,4 +1,5 @@
 export interface ITimer {
+    setContext?(key: any, value?: any): any;
 
     log(action: string, duration: number, ...args: any[]): void;
     log(data: { [key: string]: any }): void;

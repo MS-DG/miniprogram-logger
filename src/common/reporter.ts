@@ -1,4 +1,10 @@
-import { utils } from "./utils";
+/**
+ * 序列化字符串
+ * @param data paramter
+ */
+export function stringify(data: any): string | number | undefined {
+    return (data && typeof data !== "string" && typeof data !== 'number') ? JSON.stringify(data) : data;
+}
 export interface Dictionary {
     [key: string]: string | number | any
 };
@@ -54,13 +60,13 @@ export class Reporter<
         if (arguments.length === 1 && typeof arguments[0] === "object") {
             for (let key in arguments[0]) {
                 if (arguments[0].hasOwnProperty(key)) {
-                    data[key] = utils.stringify(data[key]);
+                    data[key] = stringify(data[key]);
                 }
             }
         } else {
             let n = Math.min(this.Fields.length, arguments.length);
             while (n-- > 0) {
-                data[this.Fields[n] as string] = utils.stringify(arguments[n]);
+                data[this.Fields[n] as string] = stringify(arguments[n]);
             }
         }
         wx.reportAnalytics(this.TableName, this.TransformFunction ? this.TransformFunction(data as TObject) : data);

@@ -26,7 +26,7 @@
     "url": "https://github.com/MS-DG/miniprogram-logger/issues"
   },
   "devDependencies": {
-    "typescript": "^2.8.1"
+    "typescript": "^3.2.2"
   },
   "homepage": "https://github.com/MS-DG/miniprogram-logger#readme"
 }

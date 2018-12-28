@@ -1,13 +1,25 @@
 import { ConsoleManager } from './console/console';
-import { ReportMonitor as CounterReportMonitor } from './count/';
-import { ReportAnalytics as LogReporter, LogManager, LogObject, LogLevel } from './log/';
-import { ReportAnalytics as TelemetryReporter } from './telemetry/';
-import { PerformanceObject, ReportAnalytics as TimeReporter } from './time/';
+import { ReportMonitor as CounterReportMonitor } from './count/index';
+import { ReportAnalytics as LogReporter, LogManager, LogObject, LogLevel } from './log/index';
+import { ReportAnalytics as TelemetryReporter } from './telemetry/index';
+import { PerformanceObject, ReportAnalytics as TimeReporter } from './time/index';
 
-export { ICounter } from './count/';
-export { ILogger, AllLevels, isLogLevel } from './log/';
-export { ITelemetry } from './telemetry/';
-export { ITimer } from './time/';
+export { ICounter } from './count/index';
+export { ILogger, AllLevels, isLogLevel } from './log/index';
+export { ITelemetry } from './telemetry/index';
+export { ITimer } from './time/index';
+
+export {
+    ConsoleManager,
+    CounterReportMonitor,
+    LogReporter,
+    LogManager,
+    LogObject,
+    LogLevel,
+    TelemetryReporter,
+    TimeReporter,
+    PerformanceObject,
+}
 
 /**
  * 原始console
@@ -66,14 +78,3 @@ export interface DefaultTimeObject extends PerformanceObject {
     user?: any,
 }
 
-export {
-    ConsoleManager,
-    CounterReportMonitor,
-    LogReporter,
-    LogManager,
-    LogObject,
-    LogLevel,
-    TelemetryReporter,
-    TimeReporter,
-    PerformanceObject,
-}

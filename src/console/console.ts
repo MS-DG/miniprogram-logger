@@ -1,10 +1,10 @@
-import { ICounter } from "../count/";
-import { ILogger, LogLevel } from "../log/";
+import { ICounter } from "../count/index";
+import { ILogger, LogLevel } from "../log/index";
 import { ITimer } from "../time/ITimer";
-import { ITelemetry } from "../telemetry/";
-import { TelemetryObject } from "../telemetry/";
-import { PerformanceObject } from "../time/";
-import { LogObject } from "../log/";
+import { ITelemetry } from "../telemetry/index";
+import { TelemetryObject } from "../telemetry/index";
+import { PerformanceObject } from "../time/index";
+import { LogObject } from "../log/index";
 
 export type ConsoleLevel = LogLevel | 'time' | 'telemetry';
 

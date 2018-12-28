@@ -8,12 +8,4 @@ export module utils {
             return v.toString(16);
         });
     };
-
-    /**
-     * 序列化字符串
-     * @param data paramter
-     */
-    export function stringify(data: any): string | number | undefined {
-        return (data && typeof data !== "string" && typeof data !== 'number') ? JSON.stringify(data) : data;
-    }
 }

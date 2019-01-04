@@ -1,9 +1,7 @@
 
 export interface ITelemetry {
-    TableName: string;
-    UserInfo: UserInfo,
-    Extension: any,
-    log(action: string, parameter?: string, processTimeInMS?: number, correlationId?: string): void;
+    setContext?(key: any, value?: any): any;
+    record(action: string, ...args: any[]): void;
 }
 
 export interface UserInfo {
@@ -13,10 +11,4 @@ export interface UserInfo {
     union_id?: string;
 }
 
-export interface TelemetryObject {
-    id: string;
-    action: string;
-    parameter?: string;
-    extension?: string;
-    user_info: string;
-}
+

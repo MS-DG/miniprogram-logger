@@ -1,67 +1,92 @@
 # miniprogram-logger
 It is used to logger and gather statistics of users' behavior by using wx.reportAnalytics
+
 ## Install
-npm i miniprogram-logger -S
+
+`npm i miniprogram-logger -S`
+
 ## Usage
+
+```ts
+import {logger} from 'miniprogram-logger';
+logger.debug('action','log something',correlation_id);
+logger.info('action2', 'info or content',correlation_id);
+logger.warn('action2', 'important message',correlation_id);
+logger.error('action2', {err:Exception},correlation_id);
+
+//开始计时
+logger.time('timer-label',{action:'',param:''});
+//完成计时
+logger.timeEnd('timer-label');
+
+//
+logger.telemetry('do something',{p:'参数'},{})
+
+```
+
+
 ### 1. Create the data event in the MiniProgram backend as follow:(Reference: )
-#### WxMpLogger
 
-```ts
+[https://developers.weixin.qq.com/miniprogram/analysis/custom/](https://developers.weixin.qq.com/miniprogram/analysis/custom/#12-%E5%AE%9A%E4%B9%89%E4%BA%8B%E4%BB%B6)
+
+
+`id`和`record_time` 默认会自动生成
+
+下列所有非`number`类型均对应`string`
+
+#### DefaultLogObject
+日志对象
+```json
 {
-    id: string;
-    timestamp: string;
-    correlation_id: string;
-    level: string;
-    action: string;
-    content: string;
-    [key: string]: string | number;
+    "level": "LogLevel",
+    "action": "string",
+    "content": "any",
+    "user":{},
+    "correlation_id": "string",
+    "id": "string",
+    "record_time": "number"
 }
 ```
+上报事件名`log`;
 
-#### WxMpTelemetry
-
-```ts
+#### TelemetryObject
+记录Telemetry
+```json
 {
-    id: string;
-    action: string;
-    parameter: string;
-    extension: string;
-    user_info: string;
+    "id": "string",
+    "action": "string",
+    "param": "any",
+    "extension": {
+        "debug_correlation_id": "string",
+        "process_time": "number",
+        "timestamp": "string | number"
+    },
+    "user": {
+        "app_name": "string",
+        "app_id": "string",
+        "open_id": "string",
+        "union_id": "string",
+    }
 }
 ```
+上报事件名`telemetry`;
 
-#### WxMpPerformance
 
-```ts
+#### TimeReporter
+时间统计对象
+
+```json
 {
-    id: string;
-    user: string;
-    param: string;
-    extension: string;
-    record_time: number;
-    correlation_id: string;
-    time: number;
-    action: string
+    "action": "string",
+    "time": "number",
+    "param": "any",
+    "correlation_id":"string",
+    "result":"any",
+    "type":"string",
+    "user": "any",
+    "id": "string",
+    "record_time": "number"
 }
 ```
-
-### 2. Initialization
-
-#### WxMpLogger
-```ts
-const logger: WxMpLogger = new WxMpLogger("logger", { extension1: "extension1", extension2: 2 }, wx.getLogManager());
-logger.debug("action1", "content1", { extension3: "extension3" });
-```
-#### WxMpTelemetry
-```ts
-const telemetry: WxMpTelemetry = new WxMpTelemetry("telemetry", { app_id: "1", app_name: "2", open_id: "3", union_id: "4" }, { a: "aaa", b: "bbb" }, "11111-22222-33333");
-telemetry.log("action1", "parameter1", 10);
-```
-#### WxMpPerformance
-```ts
-const performance: WxMpPerformance = new WxMpPerformance("performance", { extension1: "extension1", extension2: "extension2" });
-telemetry.log("action1", "parameter1", 10);
-```
-
 
 

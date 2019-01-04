@@ -8,17 +8,4 @@ export module utils {
             return v.toString(16);
         });
     };
-
-    /**
-     * 序列化字符串
-     * @param data paramter
-     */
-    export function stringify(data: any): string | undefined {
-        return (data && typeof data !== "string") ? JSON.stringify(data) : data;
-    }
 }
-
-export declare var wx: {
-    reportAnalytics: (eventName: string, data: object) => void;
-}
-

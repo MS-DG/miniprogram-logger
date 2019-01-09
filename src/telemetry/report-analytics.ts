@@ -1,7 +1,7 @@
 
 import { ITelemetry, UserInfo } from "./ITelemetry";
 import { Reporter, Dictionary } from "../common/reporter";
-import { utils } from "../common/utils";
+import { guid } from "../common/guid";
 
 export interface TelemetryObject extends Dictionary {
     /** 记录ID */
@@ -23,7 +23,7 @@ export interface TelemetryObject extends Dictionary {
 export function TelemetryTransformFunction<T extends TelemetryObject =TelemetryObject>(data: T): Dictionary {
     if (typeof data === "object") {
         if (!data.id) {
-            data.id = utils.guid();
+            data.id = guid();
         }
         if (!data.extension) {
             data.extension = {};

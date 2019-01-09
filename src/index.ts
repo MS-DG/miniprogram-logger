@@ -8,6 +8,7 @@ export { ICounter } from './count/index';
 export { ILogger, AllLevels, isLogLevel } from './log/index';
 export { ITelemetry } from './telemetry/index';
 export { ITimer } from './time/index';
+export { guid } from './common/guid';
 
 export {
     ConsoleManager,

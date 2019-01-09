@@ -1,7 +1,7 @@
 /// <reference lib="es2015"/>
 import { ITimer } from "./ITimer";
 import { Reporter, Dictionary } from "../common/reporter";
-import { utils } from "../common/utils";
+import { guid } from "../common/guid";
 
 export interface PerformanceObject extends Dictionary {
     /** id */
@@ -19,7 +19,7 @@ export interface PerformanceObject extends Dictionary {
  */
 export function PerformanceTransformFunction<T extends PerformanceObject =PerformanceObject>(data: T): Dictionary {
     if (typeof data === "object") {
-        data.id = data.id || utils.guid();
+        data.id = data.id || guid();
         data.record_time = data.record_time || Date.now();
     }
     return data;

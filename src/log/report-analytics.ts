@@ -1,5 +1,5 @@
 import { ILogger, LogLevel } from "./ILogger";
-import { utils } from "../common/utils";
+import { guid } from "../common/guid";
 import { Reporter, Dictionary } from "../common/reporter";
 
 export interface LogObject extends Dictionary {
@@ -26,7 +26,7 @@ export type LogValues = [LogLevel, string, any]
 export function LogTransformFunction<T extends LogObject =LogObject>(data: T): Dictionary {
     if (typeof data === "object") {
         if (!data.id) {
-            data.id = utils.guid();
+            data.id = guid();
         }
         if (!data.record_time) {
             data.record_time = Date.now();

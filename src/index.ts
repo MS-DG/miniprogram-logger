@@ -43,7 +43,7 @@ export const defaultLogReporter = new LogReporter<DefaultLogObject, [LogLevel, s
  * 计时器
  */
 export const defaultTimer = new TimeReporter<DefaultTimeObject, [string, number, any, string, any, string | number]>(
-    'preformance',
+    'time',
     ['action', 'time', 'param', 'correlation_id', 'result', 'type']
 );
 

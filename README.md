@@ -30,11 +30,23 @@ logger.telemetry('do something',{p:'参数'},{})
 [https://developers.weixin.qq.com/miniprogram/analysis/custom/](https://developers.weixin.qq.com/miniprogram/analysis/custom/#12-%E5%AE%9A%E4%B9%89%E4%BA%8B%E4%BB%B6)
 
 
+<details>
+
+<summary>自定义记录表
+</summary>
+
+* ![log](https://user-images.githubusercontent.com/6290356/50898793-2bb69700-144b-11e9-933a-0c0349d6a2fb.png)
+* ![telemetry](https://user-images.githubusercontent.com/6290356/50898526-666bff80-144a-11e9-84e1-c85d6259255e.png)
+* ![time](https://user-images.githubusercontent.com/6290356/50899152-49383080-144c-11e9-8667-dd4aed600380.png)
+
+</details>
+
 `id`和`record_time` 默认会自动生成
 
 下列所有非`number`类型均对应`string`
 
 #### DefaultLogObject
+
 日志对象
 ```json
 {
@@ -49,7 +61,19 @@ logger.telemetry('do something',{p:'参数'},{})
 ```
 上报事件名`log`;
 
+表结构
+| 字段 | 类型 | 说明 |
+|---	|---	|---	|
+| id | string| 单条记录过滤ID |
+| level | string| 日志级别 |
+| action | string| 操作 |
+| content | string | 内容 |
+| correlation_id | string | 关联ID |
+| user | string | 客户端脱敏数据 |
+| record_time | number | 上报时间 |
+
 #### TelemetryObject
+
 记录Telemetry
 ```json
 {
@@ -69,10 +93,20 @@ logger.telemetry('do something',{p:'参数'},{})
     }
 }
 ```
-上报事件名`telemetry`;
 
+自定上报默认事件名`telemetry`;
+
+表结构
+| 字段 | 类型 | 说明 |
+|---	|---	|---	|
+| id | string| 单条记录过滤ID |
+| action | string| 操作 |
+| param | string | 参数 |
+| extension | string | 其它数据 |
+| user | string | 客户端脱敏数据 |
 
 #### TimeReporter
+
 时间统计对象
 
 ```json
@@ -88,5 +122,20 @@ logger.telemetry('do something',{p:'参数'},{})
     "record_time": "number"
 }
 ```
+
+自定上报默认事件名`time`;
+
+表结构
+| 字段 | 类型 | 说明 |
+|---	|---	|---	|
+| id | string| 单条记录过滤ID |
+| action | string| 操作 |
+| time | number | 操作耗时 |
+| param | string | 参数 |
+| correlation_id | string | 关联ID |
+| result | string | 操作结果 |
+| type | string | 操作分类 |
+| user | string | 客户端脱敏数据 |
+| record_time | number | 上报时间 |
 
 

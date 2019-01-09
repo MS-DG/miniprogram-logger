@@ -135,9 +135,12 @@ export class ConsoleManager<TLog=LogObject, TTime=PerformanceObject, TTelemetry=
      * 一次记录时间(性能)日志
      * @param action - 操作
      * @param time - 时间
+     * @param parameter - 参数
+     * @param correlationId - 关联ID 
+     * @param result - 操作结果
      * @param args - 其它参数
      */
-    perfLog(action: string, time: number, ...args: any): void;
+    perfLog(action: string, time: number, parameter?: any, correlationId?: string, result?: string | any, ...args: any): void;
     perfLog(data: TTime): void;
     perfLog() {
         if (this.Timers) {

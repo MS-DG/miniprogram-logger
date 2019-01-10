@@ -1,10 +1,6 @@
 # miniprogram-logger
 It is used to logger and gather statistics of users' behavior by using wx.reportAnalytics
 
-## Install
-
-`npm i miniprogram-logger -S`
-
 ## Usage
 
 ```ts
@@ -24,6 +20,37 @@ logger.telemetry('do something',{p:'参数'},{})
 
 ```
 
+## API
+
+### Const object
+
+* **`logger` 统一的默认logger对象，封装下面全部**
+* `defaultCounter` 默认计数上报对象
+* `defaultLogManager` 本地日志管理对象
+* `defaultLogReporter` 自定义分析日志上报对象
+* `defaultTimer` 耗时统计上报对象
+* `defaultTelemetry` 用户行为统计上报对象
+
+### Function
+
+* `guid()` get a UUID like string
+* `isLogLevel(level:any)` level is `LogLevel` or not
+
+### Class
+
+* `ConsoleManager`
+* `CounterReportMonitor`
+* `LogReporter`
+* `LogManager`
+* `LogObject`
+* `LogLevel`
+* `TelemetryReporter`
+* `TimeReporter`
+* `PerformanceObject`
+
+## Install
+
+`npm i miniprogram-logger -S`
 
 ### 1. Create the data event in the MiniProgram backend as follow:(Reference: )
 
@@ -59,9 +86,10 @@ logger.telemetry('do something',{p:'参数'},{})
     "record_time": "number"
 }
 ```
-上报事件名`log`;
 
+上报事件名`log`;
 表结构
+
 | 字段 | 类型 | 说明 |
 |---	|---	|---	|
 | id | string| 单条记录过滤ID |
@@ -95,8 +123,8 @@ logger.telemetry('do something',{p:'参数'},{})
 ```
 
 自定上报默认事件名`telemetry`;
-
 表结构
+
 | 字段 | 类型 | 说明 |
 |---	|---	|---	|
 | id | string| 单条记录过滤ID |
@@ -126,6 +154,7 @@ logger.telemetry('do something',{p:'参数'},{})
 自定上报默认事件名`time`;
 
 表结构
+
 | 字段 | 类型 | 说明 |
 |---	|---	|---	|
 | id | string| 单条记录过滤ID |

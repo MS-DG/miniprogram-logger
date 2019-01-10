@@ -1,7 +1,7 @@
 # miniprogram-logger
 It is used to logger and gather statistics of users' behavior by using wx.reportAnalytics
 
-## Usage
+## example
 
 ```ts
 import {logger} from 'miniprogram-logger';
@@ -24,7 +24,7 @@ logger.telemetry('do something',{p:'参数'},{})
 
 ### Const object
 
-* **`logger` 统一的默认logger对象，封装下面全部**
+* **`logger` 统一的默认logger对象，类似console api 方式封装下面全部**
 * `defaultCounter` 默认计数上报对象
 * `defaultLogManager` 本地日志管理对象
 * `defaultLogReporter` 自定义分析日志上报对象

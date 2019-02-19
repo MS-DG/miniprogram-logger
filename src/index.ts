@@ -82,6 +82,11 @@ export interface DefaultTimeObject extends PerformanceObject {
 }
 
 let isInjected = false;
+/**
+ * 监听全家错误
+ * wx.onPageNotFound
+ * wx.onError
+ */
 export function inject() {
     if (!isInjected) {
         isInjected = true;

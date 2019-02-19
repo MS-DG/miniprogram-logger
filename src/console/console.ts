@@ -6,10 +6,9 @@ import { TelemetryObject } from "../telemetry/index";
 import { PerformanceObject } from "../time/index";
 import { LogObject } from "../log/index";
 
-export type ConsoleLevel = LogLevel | 'time' | 'telemetry';
+export type ConsoleLevel = LogLevel | "time" | "telemetry";
 
-export class ConsoleManager<TLog=LogObject, TTime=PerformanceObject, TTelemetry=TelemetryObject> {
-
+export class ConsoleManager<TLog = LogObject, TTime = PerformanceObject, TTelemetry = TelemetryObject> {
     public readonly Counters: ICounter[];
 
     public readonly Loggers: ILogger[];
@@ -26,13 +25,13 @@ export class ConsoleManager<TLog=LogObject, TTime=PerformanceObject, TTelemetry=
 
     /**
      * 计数
-     * @param label 
-     * @param value 
+     * @param label
+     * @param value
      */
     count(label?: string, value?: number): void {
         if (this.Counters) {
             const args = arguments;
-            this.Counters.forEach(function (v) { v.count.apply(v, args as any) });
+            this.Counters.forEach(v => v.count.apply(v, args as any));
         }
     }
 
@@ -48,7 +47,7 @@ export class ConsoleManager<TLog=LogObject, TTime=PerformanceObject, TTelemetry=
     debug() {
         if (this.Loggers) {
             const args = arguments;
-            this.Loggers.forEach(function (v) { v.debug.apply(v, args as any) });
+            this.Loggers.forEach(v => v.debug.apply(v, args as any));
         }
     }
 
@@ -64,7 +63,7 @@ export class ConsoleManager<TLog=LogObject, TTime=PerformanceObject, TTelemetry=
     info(): void {
         if (this.Loggers) {
             const args = arguments;
-            this.Loggers.forEach(function (v) { v.info.apply(v, args as any) });
+            this.Loggers.forEach(v => v.info.apply(v, args as any));
         }
     }
 
@@ -80,7 +79,7 @@ export class ConsoleManager<TLog=LogObject, TTime=PerformanceObject, TTelemetry=
     warn(): void {
         if (this.Loggers) {
             const args = arguments;
-            this.Loggers.forEach(function (v) { v.warn.apply(v, args as any) });
+            this.Loggers.forEach(v => v.warn.apply(v, args as any));
         }
     }
     /**
@@ -95,22 +94,30 @@ export class ConsoleManager<TLog=LogObject, TTime=PerformanceObject, TTelemetry=
     error(): void {
         if (this.Loggers) {
             const args = arguments;
-            this.Loggers.forEach(function (v) { v.error.apply(v, args as any) });
+            this.Loggers.forEach(v => v.error.apply(v, args as any));
         }
     }
 
+    /**
+     *
+     * @param level 日志级别
+     * @param action 日志操作
+     * @param content 内容
+     * @param correlationId 关联ID
+     * @param optionalParams ... 其它参数
+     */
     log(level: ConsoleLevel, action: string, content?: any, correlationId?: string, ...optionalParams: any[]): void {
         const args = arguments;
-        if (level === 'time') {
+        if (level === "time") {
             if (this.Timers) {
-                this.Timers.forEach(function (v) { v.log.apply(v, Array.prototype.slice.call(args, 1) as any) });
+                this.Timers.forEach(v => v.log.apply(v, Array.prototype.slice.call(args, 1) as any));
             }
-        } else if (level === 'telemetry') {
+        } else if (level === "telemetry") {
             if (this.Telemetry) {
-                this.Telemetry.forEach(function (v) { v.record.apply(v, Array.prototype.slice.call(args, 1) as any) });
+                this.Telemetry.forEach(v => v.record.apply(v, Array.prototype.slice.call(args, 1) as any));
             }
         } else if (this.Loggers) {
-            this.Loggers.forEach(function (v) { v.log.apply(v, args as any) });
+            this.Loggers.forEach(v => v.log.apply(v, args as any));
         }
     }
 
@@ -127,7 +134,7 @@ export class ConsoleManager<TLog=LogObject, TTime=PerformanceObject, TTelemetry=
     telemetry(): void {
         if (this.Telemetry) {
             const args = Array.prototype.slice.call(arguments, 1);
-            this.Telemetry.forEach(function (v) { v.record.apply(v, args as any) });
+            this.Telemetry.forEach(v => v.record.apply(v, args as any));
         }
     }
 
@@ -136,16 +143,23 @@ export class ConsoleManager<TLog=LogObject, TTime=PerformanceObject, TTelemetry=
      * @param action - 操作
      * @param time - 时间
      * @param parameter - 参数
-     * @param correlationId - 关联ID 
+     * @param correlationId - 关联ID
      * @param result - 操作结果
      * @param args - 其它参数
      */
-    perfLog(action: string, time: number, parameter?: any, correlationId?: string, result?: string | any, ...args: any): void;
+    perfLog(
+        action: string,
+        time: number,
+        parameter?: any,
+        correlationId?: string,
+        result?: string | any,
+        ...args: any
+    ): void;
     perfLog(data: TTime): void;
     perfLog() {
         if (this.Timers) {
             const args = arguments;
-            this.Timers.forEach(function (v) { v.log.apply(v, args as any) });
+            this.Timers.forEach(v => v.log.apply(v, args as any));
         }
     }
     /**
@@ -155,7 +169,7 @@ export class ConsoleManager<TLog=LogObject, TTime=PerformanceObject, TTelemetry=
      */
     time(label: string, context?: Partial<TTime>): void {
         if (this.Timers) {
-            this.Timers.forEach(function (v) { v.time(label, context) });
+            this.Timers.forEach(v => v.time(label, context));
         }
     }
     /**
@@ -165,7 +179,7 @@ export class ConsoleManager<TLog=LogObject, TTime=PerformanceObject, TTelemetry=
      */
     timeEnd(label: string, context?: Partial<TTime>): void {
         if (this.Timers) {
-            this.Timers.forEach(function (v) { v.timeEnd(label, context) });
+            this.Timers.forEach(v => v.timeEnd(label, context));
         }
     }
 
@@ -173,8 +187,8 @@ export class ConsoleManager<TLog=LogObject, TTime=PerformanceObject, TTelemetry=
      * 设置统一的上下文信息
      */
     setContext<T extends (keyof TTelemetry) & (keyof TTime) & (keyof TLog)>(key: T, value: TLog[T]): void {
-        this.Loggers && this.Loggers.forEach(function (v) { v.setContext && v.setContext(key, value) });
-        this.Telemetry && this.Telemetry.forEach(function (v) { v.setContext && v.setContext(key, value) });
-        this.Timers && this.Timers.forEach(function (v) { v.setContext && v.setContext(key, value) });
+        this.Loggers.forEach(v => v.setContext && v.setContext(key, value));
+        this.Telemetry.forEach(v => v.setContext && v.setContext(key, value));
+        this.Timers.forEach(v => v.setContext && v.setContext(key, value));
     }
 }

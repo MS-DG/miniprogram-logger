@@ -32,7 +32,7 @@ logger.telemetry('do something',{p:'参数'},{})
 * `defaultTelemetry` 用户行为统计上报对象
 
 ### Function
-
+* `inject()` listen and log the app onError/onPageNotFound
 * `guid()` get a UUID like string
 * `isLogLevel(level:any)` level is `LogLevel` or not
 
@@ -168,3 +168,8 @@ logger.telemetry('do something',{p:'参数'},{})
 | record_time | number | 上报时间 |
 
 
+## App Error
+```js
+import {inject} from "miniprogram-logger";
+inject();//自动记录全局错误
+```

@@ -3,13 +3,19 @@
     "version": "1.2.0",
     "description": " It is used to log and gather statistics of users' behavior. ",
     "main": "dist/index.js",
-    "typings": "dist/index.d.ts",
+    "typings": "es/index.d.ts",
     "files": [
-        "dist/**"
+        "dist/",
+        "es/",
+        "src/"
     ],
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "tsc"
+        "start": "npm run build",
+        "build": "npm run build:es5 && npm run build:es6",
+        "build:es5": "tsc --target es5 -d --outDir dist",
+        "build:es6": "tsc --target es6 -d --outDir es",
+        "pub": "npm run build && npm publish --access public",
+        "test": "npm run build"
     },
     "repository": {
         "type": "git",

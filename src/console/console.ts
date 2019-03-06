@@ -1,3 +1,5 @@
+/// <reference lib="dom" />
+
 import { ICounter } from "../count/index";
 import { ILogger, LogLevel } from "../log/index";
 import { ITimer } from "../time/ITimer";

@@ -1,3 +1,5 @@
+/// <reference lib="dom" />
+
 import { ConsoleManager } from "./console/console";
 import { ReportMonitor as CounterReportMonitor } from "./count/index";
 import { ReportAnalytics as LogReporter, LogManager, LogObject, LogLevel } from "./log/index";

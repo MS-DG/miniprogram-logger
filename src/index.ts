@@ -65,7 +65,7 @@ logger.Timers.push(defaultTimer);
 
 export interface DefaultLogObject extends LogObject {
     /** 关联ID */
-    correlation_id?: string;
+    correlationId?: string;
     /** 客户端用户数据(脱敏后),通过context设置 */
     user?: any;
 }
@@ -74,7 +74,7 @@ export interface DefaultTimeObject extends PerformanceObject {
     /** 参数 */
     param?: any;
     /** 关联ID */
-    correlation_id?: string;
+    correlationId?: string;
     /** 结果 */
     result?: any;
     /** 类型 */

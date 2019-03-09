@@ -20,11 +20,21 @@ export type LogValues = [LogLevel, string, any]
 
 /**
  * 默认Log对象转换函数
+ * 自动添加蛇形命名
  * 字段中注入`id`和`record_time`
  * @param data LogObject
  */
 export function LogTransformFunction<T extends LogObject =LogObject>(data: T): Dictionary {
     if (typeof data === "object") {
+        Object.keys(data).reduce(function (acc, key) {
+            const snake = key.replace(/([A-Z]+)/g, function (m, x) {
+                return '_' + x.toLowerCase();
+            });
+            if (!(snake in acc)) {
+                acc[snake] = data[key];
+            }
+            return acc;
+        }, data)
         if (!data.id) {
             data.id = guid();
         }

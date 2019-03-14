@@ -42,6 +42,7 @@ export class ReportAnalytics
 
     constructor(tableName: string, context?: Partial<TelemetryObject>) {
         super(tableName, ['action', 'param', 'extension', 'user_info'], context);
+        this.TransformFunction = TelemetryTransformFunction;
     }
 
     /**

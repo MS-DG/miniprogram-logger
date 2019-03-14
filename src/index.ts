@@ -7,9 +7,9 @@ import { ReportAnalytics as TelemetryReporter } from "./telemetry/index";
 import { PerformanceObject, ReportAnalytics as TimeReporter } from "./time/index";
 
 export { ICounter } from "./count/index";
-export { ILogger, AllLevels, isLogLevel } from "./log/index";
-export { ITelemetry } from "./telemetry/index";
-export { ITimer } from "./time/index";
+export { ILogger, AllLevels, isLogLevel, LogTransformFunction } from "./log/index";
+export { ITelemetry, TelemetryTransformFunction } from "./telemetry/index";
+export { ITimer, PerformanceTransformFunction } from "./time/index";
 export { guid } from "./common/guid";
 
 export {

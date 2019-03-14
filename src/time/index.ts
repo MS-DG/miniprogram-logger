@@ -1,2 +1,2 @@
 export { ITimer } from './ITimer';
-export { ReportAnalytics, PerformanceObject } from './report-analytics';
+export { ReportAnalytics, PerformanceObject, PerformanceTransformFunction } from './report-analytics';

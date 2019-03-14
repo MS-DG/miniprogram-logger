@@ -19,6 +19,15 @@ export interface PerformanceObject extends Dictionary {
  */
 export function PerformanceTransformFunction<T extends PerformanceObject = PerformanceObject>(data: T): Dictionary {
     if (typeof data === "object") {
+        Object.keys(data).reduce(function(acc, key) {
+            const snake = key.replace(/([A-Z]+)/g, function(m, x) {
+                return "_" + x.toLowerCase();
+            });
+            if (!(snake in acc)) {
+                acc[snake] = data[key];
+            }
+            return acc;
+        }, data);
         data.id = data.id || guid();
         data.record_time = data.record_time || Date.now();
     }

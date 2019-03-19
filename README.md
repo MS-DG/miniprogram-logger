@@ -15,8 +15,10 @@ logger.time('timer-label',{action:'',param:''});
 //完成计时
 logger.timeEnd('timer-label');
 
-//
 logger.telemetry('do something',{p:'参数'},{})
+
+// 全局参数设置
+logger.setContext('key','value');
 
 ```
 
@@ -24,7 +26,7 @@ logger.telemetry('do something',{p:'参数'},{})
 
 ### Const object
 
-* **`logger` 统一的默认logger对象，类似console api 方式封装下面全部**
+* **`logger` 统一的默认logger对象，类似console api 方式封装下面全部** (推荐使用)
 * `defaultCounter` 默认计数上报对象
 * `defaultLogManager` 本地日志管理对象
 * `defaultLogReporter` 自定义分析日志上报对象

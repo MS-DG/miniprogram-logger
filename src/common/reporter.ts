@@ -3,12 +3,11 @@
  * @param data paramter
  */
 export function stringify(data: any): string | number | undefined {
-    return (data && typeof data !== "string" && typeof data !== 'number') ? JSON.stringify(data) : data;
+    return data && typeof data !== "string" && typeof data !== "number" ? JSON.stringify(data) : data;
 }
 export interface Dictionary {
-    [key: string]: string | number | any
-};
-
+    [key: string]: string | number | any;
+}
 
 /**
  * 上报封装
@@ -16,8 +15,8 @@ export interface Dictionary {
 export class Reporter<
     TObject extends Dictionary,
     TValues extends TObject[keyof TObject][],
-    TKeys extends (keyof TObject)[]= (keyof TObject)[]>
-{
+    TKeys extends (keyof TObject)[] = (keyof TObject)[]
+> {
     /**
      * 上报转换函数
      */
@@ -42,34 +41,34 @@ export class Reporter<
     }
 
     /**
-     * 
+     *
      * @param args 上报的参数,各个参数分开,上报
      */
     protected report(...args: TValues): void;
     /**
      * 上报 Object
-     * @param data 
+     * @param data
      */
     protected report(data: TObject): void;
     protected report() {
         if (arguments.length === 0) {
-            console.error('report need 1 or more parameters');
+            console.error("report need 1 or more parameters");
             return;
         }
-        const data = this.Context;
+        const data = Object.assign({}, this.Context);
         if (arguments.length === 1 && typeof arguments[0] === "object") {
-            for (let key in arguments[0]) {
-                if (arguments[0].hasOwnProperty(key)) {
-                    data[key] = stringify(data[key]);
-                }
-            }
+            Object.assign(data, arguments[0]);
         } else {
             let n = Math.min(this.Fields.length, arguments.length);
             while (n-- > 0) {
-                data[this.Fields[n] as string] = stringify(arguments[n]);
+                data[this.Fields[n] as string] = arguments[n];
             }
         }
-        wx.reportAnalytics(this.TableName, this.TransformFunction ? this.TransformFunction(data as TObject) : data);
+        if (this.TransformFunction) {
+            this.TransformFunction(data as TObject);
+        }
+        Object.keys(data).forEach(key => (data[key] = stringify(data[key])));
+        wx.reportAnalytics(this.TableName, data);
     }
 
     /**
@@ -80,14 +79,14 @@ export class Reporter<
     public setContext<T extends keyof TObject = string>(key: T, value: TObject[T]): this;
     /**
      * 设置Context
-     * @param context 
+     * @param context
      */
     public setContext(context: Partial<TObject>): this;
     public setContext(): this {
         if (arguments.length == 1) {
             Object.assign(this.Context, arguments[0]);
         } else if (arguments[1] === undefined) {
-            delete this.Context[arguments[0]]
+            delete this.Context[arguments[0]];
         } else {
             this.Context[arguments[0]] = arguments[1];
         }
@@ -97,4 +96,4 @@ export class Reporter<
 
 declare var wx: {
     reportAnalytics: (table: string, data: object) => void;
-}
+};

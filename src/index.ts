@@ -85,15 +85,20 @@ export interface DefaultTimeObject extends PerformanceObject {
 
 let isInjected = false;
 /**
- * 监听全家错误
+ * 监听全局错误
  * wx.onPageNotFound
  * wx.onError
  */
 export function inject() {
     if (!isInjected) {
         isInjected = true;
-        wx.onPageNotFound(res => logger.error("wx.PageNotFound", res));
-        wx.onError(err => logger.error(err));
+        wx.onPageNotFound(res => logger.error("wx.onPageNotFound", res));
+        wx.onError(err => logger.error("wx.onError", err));
+        //基础库 2.6.2 开始支持
+        if (wx.onAudioInterruptionBegin) {
+            wx.onAudioInterruptionEnd(err => logger.warn("wx.onAudioInterruptionEnd", err));
+            wx.onAudioInterruptionBegin(err => logger.warn("wx.onAudioInterruptionBegin", err));
+        }
     }
 }
 
@@ -108,4 +113,6 @@ declare namespace wx {
     function onPageNotFound(callback: (res: PageResult) => void): void;
     /** 小程序错误事件的回调函数 */
     function onError(callback: (error: string) => void): void;
+    function onAudioInterruptionBegin(callback: (error: string) => void): void;
+    function onAudioInterruptionEnd(callback: (error: string) => void): void;
 }

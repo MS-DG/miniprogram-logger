@@ -79,6 +79,7 @@ export class ReportAnalytics<
      */
     public timeEnd(label: string, context?: Partial<T>): void {
         if (!this.end(label as any, context)) {
+            //@ts-ignore
             console.error("timer label not found", label);
         }
     }

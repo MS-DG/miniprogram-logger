@@ -52,6 +52,7 @@ export class Reporter<
     protected report(data: TObject): void;
     protected report() {
         if (arguments.length === 0) {
+            //@ts-ignore
             console.error("report need 1 or more parameters");
             return;
         }

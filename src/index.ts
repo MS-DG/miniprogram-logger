@@ -1,6 +1,4 @@
-/// <reference lib="dom" />
-
-import { ConsoleManager } from "./console/console";
+import { ConsoleManager, Console } from "./console/console";
 import { ReportMonitor as CounterReportMonitor } from "./count/index";
 import { ReportAnalytics as LogReporter, LogManager, LogObject, LogLevel } from "./log/index";
 import { ReportAnalytics as TelemetryReporter } from "./telemetry/index";
@@ -23,6 +21,8 @@ export {
     TimeReporter,
     PerformanceObject,
 };
+
+declare const console: Console;
 
 /**
  * 原始console

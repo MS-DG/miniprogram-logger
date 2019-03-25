@@ -1,5 +1,3 @@
-/// <reference lib="dom" />
-
 import { ICounter } from "../count/index";
 import { ILogger, LogLevel } from "../log/index";
 import { ITimer } from "../time/ITimer";
@@ -193,4 +191,21 @@ export class ConsoleManager<TLog = LogObject, TTime = PerformanceObject, TTeleme
         this.Telemetry.forEach(v => v.setContext && v.setContext(key, value));
         this.Timers.forEach(v => v.setContext && v.setContext(key, value));
     }
+}
+
+export interface Console {
+    assert(condition?: boolean, message?: string, ...data: any[]): void;
+    clear(): void;
+    count(label?: string): void;
+    debug(message?: any, ...optionalParams: any[]): void;
+    error(message?: any, ...optionalParams: any[]): void;
+    group(groupTitle?: string, ...optionalParams: any[]): void;
+    groupCollapsed(groupTitle?: string, ...optionalParams: any[]): void;
+    groupEnd(): void;
+    info(message?: any, ...optionalParams: any[]): void;
+    log(message?: any, ...optionalParams: any[]): void;
+    time(label?: string): void;
+    timeEnd(label?: string): void;
+    timeStamp(label?: string): void;
+    warn(message?: any, ...optionalParams: any[]): void;
 }

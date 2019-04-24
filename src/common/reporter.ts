@@ -1,3 +1,5 @@
+import { guid } from "./guid";
+
 /**
  * 序列化字符串
  * @param data paramter
@@ -9,6 +11,43 @@ export interface Dictionary {
     [key: string]: string | number | any;
 }
 
+export interface BasicLogObject extends Dictionary {
+    /** 
+     * 记录ID
+     */
+    id?: string;
+    /**
+     * 时间戳
+     */
+    timestamp?: number;
+}
+
+/**
+ * 默认Log对象转换函数
+ * 自动添加蛇形命名
+ * 字段中注入`id`和`timestamp`
+ * @param data LogObject
+*/
+export function logTransformFunction<T extends Dictionary = Dictionary>(data: T): Dictionary {
+    if (typeof data === "object") {
+        Object.keys(data).reduce(function (acc, key) {
+            const snake = key.replace(/([A-Z]+)/g, function (m, x) {
+                return "_" + x.toLowerCase();
+            });
+            if (!(snake in acc)) {
+                acc[snake] = data[key];
+            }
+            return acc;
+        }, data);
+        if (!data.id) {
+            data.id = guid();
+        }
+        if (!data.timestamp) {
+            data.timestamp = new Date().toISOString();
+        }
+    }
+    return data;
+}
 /**
  * 上报封装
  */
@@ -16,7 +55,7 @@ export class Reporter<
     TObject extends Dictionary,
     TValues extends TObject[keyof TObject][],
     TKeys extends (keyof TObject)[] = (keyof TObject)[]
-> {
+    > {
     /**
      * 上报转换函数
      */

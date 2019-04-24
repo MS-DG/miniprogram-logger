@@ -1,26 +1,18 @@
-import { ConsoleManager, Console } from "./console/console";
+import { Console, ConsoleManager } from "./console/console";
 import { ReportMonitor as CounterReportMonitor } from "./count/index";
-import { ReportAnalytics as LogReporter, LogManager, LogObject, LogLevel } from "./log/index";
+import { LogLevel, LogManager, LogObject, ReportAnalytics as LogReporter } from "./log/index";
 import { ReportAnalytics as TelemetryReporter } from "./telemetry/index";
 import { PerformanceObject, ReportAnalytics as TimeReporter } from "./time/index";
 
-export { ICounter } from "./count/index";
-export { ILogger, AllLevels, isLogLevel, LogTransformFunction } from "./log/index";
-export { ITelemetry, TelemetryTransformFunction } from "./telemetry/index";
-export { ITimer, PerformanceTransformFunction } from "./time/index";
 export { guid } from "./common/guid";
+export { logTransformFunction } from "./common/reporter";
+export { ICounter } from "./count/index";
+export { AllLevels, ILogger, isLogLevel } from "./log/index";
+export { ITelemetry, TelemetryTransformFunction } from "./telemetry/index";
+export { ITimer } from "./time/index";
+export { ConsoleManager, CounterReportMonitor, LogReporter, LogManager, LogObject, LogLevel, TelemetryReporter, TimeReporter, PerformanceObject, };
 
-export {
-    ConsoleManager,
-    CounterReportMonitor,
-    LogReporter,
-    LogManager,
-    LogObject,
-    LogLevel,
-    TelemetryReporter,
-    TimeReporter,
-    PerformanceObject,
-};
+
 
 declare const console: Console;
 

@@ -1,17 +1,19 @@
 import { ILogger, LogLevel } from "./ILogger";
-import { guid } from "../common/guid";
-import { Reporter, Dictionary } from "../common/reporter";
+import { Reporter, logTransformFunction, BasicLogObject } from "../common/reporter";
 
-export interface LogObject extends Dictionary {
-    /** 日志级别 */
+export interface LogObject extends BasicLogObject {
+    /** 
+     * 日志级别
+     */
     level?: LogLevel;
-    /** 操作 */
+    /** 
+     * 操作
+     */
     action?: string;
-    /** 内容 */
+    /** 
+     * 内容
+     */
     content?: any;
-    /** ID */
-    id?: string;
-    record_time?: number;
 }
 
 const fileds = ['level', 'action', 'content']
@@ -19,35 +21,9 @@ const fileds = ['level', 'action', 'content']
 export type LogValues = [LogLevel, string, any]
 
 /**
- * 默认Log对象转换函数
- * 自动添加蛇形命名
- * 字段中注入`id`和`record_time`
- * @param data LogObject
- */
-export function LogTransformFunction<T extends LogObject =LogObject>(data: T): Dictionary {
-    if (typeof data === "object") {
-        Object.keys(data).reduce(function (acc, key) {
-            const snake = key.replace(/([A-Z]+)/g, function (m, x) {
-                return '_' + x.toLowerCase();
-            });
-            if (!(snake in acc)) {
-                acc[snake] = data[key];
-            }
-            return acc;
-        }, data)
-        if (!data.id) {
-            data.id = guid();
-        }
-        if (!data.record_time) {
-            data.record_time = Date.now();
-        }
-    }
-    return data;
-}
-/**
  * 微信上报API
  */
-export class ReportAnalytics<T extends LogObject, TValues extends T[keyof T][]=LogValues>
+export class ReportAnalytics<T extends LogObject, TValues extends T[keyof T][] = LogValues>
     extends Reporter<T, TValues>
     implements ILogger {
 
@@ -67,7 +43,7 @@ export class ReportAnalytics<T extends LogObject, TValues extends T[keyof T][]=L
      */
     constructor(tableName: string, fields: string[] = fileds, context: Partial<T> = {}) {
         super(tableName, fields, context);
-        this.TransformFunction = LogTransformFunction;
+        this.TransformFunction = logTransformFunction;
     }
 
     /**

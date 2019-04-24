@@ -64,9 +64,9 @@ logger.setContext('key','value');
 <summary>自定义记录表
 </summary>
 
-* ![log](https://user-images.githubusercontent.com/6290356/50898793-2bb69700-144b-11e9-933a-0c0349d6a2fb.png)
+* ![log](https://user-images.githubusercontent.com/6290356/56664307-7ac2c800-66da-11e9-8d65-2d0a1ec6d38b.png)
 * ![telemetry](https://user-images.githubusercontent.com/6290356/50898526-666bff80-144a-11e9-84e1-c85d6259255e.png)
-* ![time](https://user-images.githubusercontent.com/6290356/50899152-49383080-144c-11e9-8667-dd4aed600380.png)
+* ![time](https://user-images.githubusercontent.com/6290356/56664425-a47bef00-66da-11e9-8709-fa29b940ff14.png)
 
 </details>
 
@@ -85,7 +85,7 @@ logger.setContext('key','value');
     "user":{},
     "correlation_id": "string",
     "id": "string",
-    "record_time": "number"
+    "timestamp": "string"
 }
 ```
 
@@ -100,7 +100,7 @@ logger.setContext('key','value');
 | content | string | 内容 |
 | correlation_id | string | 关联ID |
 | user | string | 客户端脱敏数据 |
-| record_time | number | 上报时间 |
+| timestamp | string | ISO时间戳 |
 
 #### TelemetryObject
 
@@ -113,7 +113,7 @@ logger.setContext('key','value');
     "extension": {
         "debug_correlation_id": "string",
         "process_time": "number",
-        "timestamp": "string | number"
+        "timestamp": "string"
     },
     "user": {
         "app_name": "string",
@@ -149,7 +149,7 @@ logger.setContext('key','value');
     "type":"string",
     "user": "any",
     "id": "string",
-    "record_time": "number"
+    "timestamp": "string"
 }
 ```
 
@@ -167,7 +167,7 @@ logger.setContext('key','value');
 | result | string | 操作结果 |
 | type | string | 操作分类 |
 | user | string | 客户端脱敏数据 |
-| record_time | number | 上报时间 |
+| timestamp | string | ISO时间戳 |
 
 
 ## App Error

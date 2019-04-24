@@ -1,50 +1,30 @@
 /// <reference lib="es2015"/>
 import { ITimer } from "./ITimer";
-import { Reporter, Dictionary } from "../common/reporter";
-import { guid } from "../common/guid";
+import { Reporter, logTransformFunction, BasicLogObject } from "../common/reporter";
 
-export interface PerformanceObject extends Dictionary {
-    /** id */
-    id?: string;
-    /** 操作 */
+export interface PerformanceObject extends BasicLogObject {
+    /** 
+     * 操作
+     */
     action?: string;
-    /** 时间 */
+    /**
+     *  时间
+     */
     time?: number;
 }
 
-/**
- * 默认Performance日志对象转换函数
- * 字段中注入`id`和`record_time`
- * @param data PerformanceObject
- */
-export function PerformanceTransformFunction<T extends PerformanceObject = PerformanceObject>(data: T): Dictionary {
-    if (typeof data === "object") {
-        Object.keys(data).reduce(function(acc, key) {
-            const snake = key.replace(/([A-Z]+)/g, function(m, x) {
-                return "_" + x.toLowerCase();
-            });
-            if (!(snake in acc)) {
-                acc[snake] = data[key];
-            }
-            return acc;
-        }, data);
-        data.id = data.id || guid();
-        data.record_time = data.record_time || Date.now();
-    }
-    return data;
-}
 
 export class ReportAnalytics<
     T extends PerformanceObject,
     TValues extends T[keyof T][],
     TKeys extends (keyof T)[] = (keyof T)[]
-> extends Reporter<T, TValues, TKeys> implements ITimer {
+    > extends Reporter<T, TValues, TKeys> implements ITimer {
     private Id = 0;
     private readonly Stopwatch = new Map<number | string, [number, Partial<T>]>();
 
     constructor(tableName: string, fields?: TKeys, context?: Partial<T>) {
         super(tableName, fields || (["action", "time"] as TKeys), context);
-        this.TransformFunction = PerformanceTransformFunction;
+        this.TransformFunction = logTransformFunction;
     }
 
     /**

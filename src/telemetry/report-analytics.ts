@@ -28,7 +28,7 @@ export function TelemetryTransformFunction<T extends TelemetryObject =TelemetryO
         if (!data.extension) {
             data.extension = {};
         }
-        data.extension.timestamp = new Date().toUTCString();
+        data.extension.timestamp = new Date().toISOString();
     }
     return data;
 }

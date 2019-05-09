@@ -10,7 +10,7 @@ export interface PerformanceObject extends BasicLogObject {
     /**
      *  时间
      */
-    time?: number;
+    duration?: number;
 }
 
 
@@ -23,17 +23,17 @@ export class ReportAnalytics<
     private readonly Stopwatch = new Map<number | string, [number, Partial<T>]>();
 
     constructor(tableName: string, fields?: TKeys, context?: Partial<T>) {
-        super(tableName, fields || (["action", "time"] as TKeys), context);
+        super(tableName, fields || (["action", "duration"] as TKeys), context);
         this.TransformFunction = logTransformFunction;
     }
 
     /**
      * 快速记录性能日志
      * @param action 操作,
-     * @param time 耗时单位毫秒
+     * @param duration 耗时单位毫秒
      * @param context 其它数据
      */
-    public log(action: string, time: number, ...args: RemoveFisrt2<TValues>): void;
+    public log(action: string, duration: number, ...args: RemoveFisrt2<TValues>): void;
     /**
      * 快速记录性能日志
      * @param data PerformanceParam

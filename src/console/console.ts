@@ -141,17 +141,17 @@ export class ConsoleManager<TLog = LogObject, TTime = PerformanceObject, TTeleme
     /**
      * 一次记录时间(性能)日志
      * @param action - 操作
-     * @param time - 时间
+     * @param duration - 耗时
      * @param parameter - 参数
-     * @param correlationId - 关联ID
+     * @param request_id - 请求ID
      * @param result - 操作结果
      * @param args - 其它参数
      */
     perfLog(
         action: string,
-        time: number,
+        duration: number,
         parameter?: any,
-        correlationId?: string,
+        requestId?: string,
         result?: string | any,
         ...args: any
     ): void;

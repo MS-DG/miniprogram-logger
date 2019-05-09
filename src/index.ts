@@ -29,19 +29,20 @@ export const defaultCounter = new CounterReportMonitor();
  * Logger
  */
 export const defaultLogManager = new LogManager();
-export const defaultLogReporter = new LogReporter<DefaultLogObject, [LogLevel, string, any, string]>("log", [
-    "level",
-    "action",
-    "content",
-    "correlation_id",
-]);
+/**
+ * 日志上报
+ */
+export const defaultLogReporter = new LogReporter<DefaultLogObject, [LogLevel, string, any, string]>(
+    "log",
+    ["level", "action", "content", "correlation_id",]
+);
 
 /**
- * 计时器
+ * 计时器上报
  */
 export const defaultTimer = new TimeReporter<DefaultTimeObject, [string, number, any, string, any, string | number]>(
     "time",
-    ["action", "time", "param", "correlation_id", "result", "type"],
+    ["action", "duration", "param", "request_id", "result", "type"],
 );
 
 /**
@@ -56,23 +57,48 @@ logger.Telemetry.push(defaultTelemetry);
 logger.Timers.push(defaultTimer);
 
 export interface DefaultLogObject extends LogObject {
-    /** 关联ID */
-    correlationId?: string;
-    /** 客户端用户数据(脱敏后),通过context设置 */
+    /** 
+     * 关联ID 
+     */
+    correlation_id?: string;
+    /**
+     *  客户端用户数据(脱敏后),通过context设置 
+     */
     user?: any;
 }
 
 export interface DefaultTimeObject extends PerformanceObject {
-    /** 参数 */
+    /**
+     *  参数 
+     */
     param?: any;
-    /** 关联ID */
-    correlationId?: string;
-    /** 结果 */
+
+    /**
+     *  结果
+     */
     result?: any;
-    /** 类型 */
+    /**
+     *  类型
+     */
     type?: string | number;
-    /** 客户端数据用户数据(脱敏后),通过context设置 */
+    /**
+     *  客户端数据用户数据(脱敏后),通过context设置 
+     */
     user?: any;
+    /**
+     * 请求ID requestId
+     */
+    request_id?: string;
+
+    /** 
+     * 关联ID 
+     */
+    correlation_id?: string;
+
+    /**
+     * 成功标识
+     */
+    success?: boolean | string;
 }
 
 let isInjected = false;

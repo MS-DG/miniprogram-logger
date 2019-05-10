@@ -156,7 +156,7 @@ logger.setContext("key", "value");
 ```json
 {
     "action": "string",
-    "time": "number",
+    "duration": "number",
     "param": "any",
     "correlation_id": "string",
     "result": "any",

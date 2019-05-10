@@ -139,7 +139,7 @@ export class ConsoleManager<TLog = LogObject, TTime = PerformanceObject, TTeleme
     }
 
     /**
-     * 一次记录时间(性能)日志
+     * 一次记录耗时间(性能)日志
      * @param action - 操作
      * @param duration - 耗时
      * @param parameter - 参数
@@ -147,7 +147,7 @@ export class ConsoleManager<TLog = LogObject, TTime = PerformanceObject, TTeleme
      * @param result - 操作结果
      * @param args - 其它参数
      */
-    perfLog(
+    timeLog(
         action: string,
         duration: number,
         parameter?: any,
@@ -155,8 +155,8 @@ export class ConsoleManager<TLog = LogObject, TTime = PerformanceObject, TTeleme
         result?: string | any,
         ...args: any
     ): void;
-    perfLog(data: TTime): void;
-    perfLog() {
+    timeLog(data: TTime): void;
+    timeLog() {
         if (this.Timers) {
             const args = arguments;
             this.Timers.forEach(v => v.log.apply(v, args as any));

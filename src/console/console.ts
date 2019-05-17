@@ -133,7 +133,7 @@ export class ConsoleManager<TLog = LogObject, TTime = PerformanceObject, TTeleme
     telemetry(data: TTelemetry): void;
     telemetry(): void {
         if (this.Telemetry) {
-            const args = Array.prototype.slice.call(arguments, 1);
+            const args = arguments;
             this.Telemetry.forEach(v => v.record.apply(v, args as any));
         }
     }

@@ -33,7 +33,7 @@ export function TelemetryTransformFunction<T extends TelemetryObject =TelemetryO
     return data;
 }
 
-type TelemetryKeys = ['action', 'param', 'extension', 'user_info'];
+type TelemetryKeys = ['action', 'param', 'extension', 'user'];
 type TelemetryValues = [string, any, Dictionary, UserInfo];
 
 export class ReportAnalytics
@@ -41,7 +41,7 @@ export class ReportAnalytics
     implements ITelemetry {
 
     constructor(tableName: string, context?: Partial<TelemetryObject>) {
-        super(tableName, ['action', 'param', 'extension', 'user_info'], context);
+        super(tableName, ['action', 'param', 'extension', 'user'], context);
         this.TransformFunction = TelemetryTransformFunction;
     }
 

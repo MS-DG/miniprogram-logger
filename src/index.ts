@@ -28,7 +28,7 @@ export const defaultCounter = new CounterReportMonitor();
 /**
  * Logger
  */
-export const defaultLogManager = new LogManager();
+export const defaultLogManager = wx.getLogManager && new LogManager();
 /**
  * 日志上报
  */
@@ -52,7 +52,10 @@ export const defaultTelemetry = new TelemetryReporter("telemetry");
 
 export const logger = new ConsoleManager<DefaultLogObject, DefaultTimeObject>(originConsole);
 logger.Counters.push(defaultCounter);
-logger.Loggers.push(defaultLogManager, defaultLogReporter);
+if (defaultLogManager) {
+    logger.Loggers.push(defaultLogManager);
+}
+logger.Loggers.push(defaultLogReporter);
 logger.Telemetry.push(defaultTelemetry);
 logger.Timers.push(defaultTimer);
 
@@ -110,8 +113,12 @@ let isInjected = false;
 export function inject() {
     if (!isInjected) {
         isInjected = true;
-        wx.onPageNotFound(res => logger.error("wx.onPageNotFound", res));
-        wx.onError(err => logger.error("wx.onError", err));
+        if (wx.onPageNotFound) {
+            wx.onPageNotFound(res => logger.error("wx.onPageNotFound", res));
+        }
+        if (wx.onError) {
+            wx.onError(err => logger.error("wx.onError", err));
+        }
         //基础库 2.6.2 开始支持
         if (wx.onAudioInterruptionBegin) {
             wx.onAudioInterruptionEnd(err => logger.warn("wx.onAudioInterruptionEnd", err));
@@ -121,6 +128,7 @@ export function inject() {
 }
 
 declare namespace wx {
+    function getLogManager():void;
     interface PageResult {
         errMsg: string;
         path: string; //	不存在页面的路径

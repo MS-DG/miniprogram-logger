@@ -109,6 +109,9 @@ let isInjected = false;
  * 监听全局错误
  * wx.onPageNotFound
  * wx.onError
+ * wx.onMemoryWarning
+ * wx.onAudioInterruptionEnd
+ * wx.onAudioInterruptionBegin
  */
 export function inject() {
     if (!isInjected) {
@@ -124,11 +127,16 @@ export function inject() {
             wx.onAudioInterruptionEnd(err => logger.warn("wx.onAudioInterruptionEnd", err));
             wx.onAudioInterruptionBegin(err => logger.warn("wx.onAudioInterruptionBegin", err));
         }
+
+        // 内存不足告警事件的回调函数 
+        if (wx.onMemoryWarning) {
+            wx.onMemoryWarning(err => logger.warn("wx.onMemoryWarning", err))
+        }
     }
 }
 
 declare namespace wx {
-    function getLogManager():void;
+    function getLogManager(): void;
     interface PageResult {
         errMsg: string;
         path: string; //	不存在页面的路径
@@ -141,4 +149,9 @@ declare namespace wx {
     function onError(callback: (error: string) => void): void;
     function onAudioInterruptionBegin(callback: (error: string) => void): void;
     function onAudioInterruptionEnd(callback: (error: string) => void): void;
+    /* 
+    * 最低基础库： `2.0.2`  
+    * 内存不足告警事件的回调函数 
+    */
+    function onMemoryWarning(callback: (error: object) => void): void;
 }

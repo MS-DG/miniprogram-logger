@@ -1,6 +1,6 @@
 import { Console, ConsoleManager } from "./console/console";
 import { ReportMonitor as CounterReportMonitor } from "./count/index";
-import { LogLevel, LogManager, LogObject, ReportAnalytics as LogReporter } from "./log/index";
+import { LogLevel, LogManager, LogObject, ReportAnalytics as LogReporter, RelatimeLogger } from "./log/index";
 import { ReportAnalytics as TelemetryReporter } from "./telemetry/index";
 import { PerformanceObject, ReportAnalytics as TimeReporter } from "./time/index";
 
@@ -26,9 +26,15 @@ export const originConsole = console;
 export const defaultCounter = new CounterReportMonitor();
 
 /**
- * Logger
+ * 本地日志Logger
  */
 export const defaultLogManager = wx.getLogManager && new LogManager();
+
+/**
+ * 实时日志
+ */
+export const defaultRealtimeLogger = wx.getRealtimeLogManager && new RelatimeLogger();
+
 /**
  * 日志上报
  */
@@ -54,6 +60,9 @@ export const logger = new ConsoleManager<DefaultLogObject, DefaultTimeObject>(or
 logger.Counters.push(defaultCounter);
 if (defaultLogManager) {
     logger.Loggers.push(defaultLogManager);
+}
+if(defaultRealtimeLogger){
+    logger.Loggers.push(defaultRealtimeLogger);
 }
 logger.Loggers.push(defaultLogReporter);
 logger.Telemetry.push(defaultTelemetry);
@@ -137,6 +146,7 @@ export function inject() {
 
 declare namespace wx {
     function getLogManager(): void;
+    function getRealtimeLogManager():void;
     interface PageResult {
         errMsg: string;
         path: string; //	不存在页面的路径

@@ -97,11 +97,7 @@ export class ReportAnalytics<T extends LogObject, TValues extends T[keyof T][] =
     }
 
     private logByLevel(level: TValues[0], args: IArguments) {
-        if (args.length === 1 && typeof args[0] === 'object') {
-            const context: T = args[0];
-            context.level = level;
-            return this.report(context);
-        } else {
+        if (this.logLevels.indexOf(level) !== -1) {
             Array.prototype.unshift.call(args, level);
             return this.report.apply(this, args as any);
         }

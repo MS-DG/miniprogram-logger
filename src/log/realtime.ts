@@ -37,7 +37,7 @@ export class RelatimeLogger implements ILogger {
         if (arguments.length > 1 && isLogLevel(arguments[0])) {
             const level: LogLevel = arguments[0];
             if (this.logLevels.indexOf(level) >= 0) {
-                this.manager[level].call(this.manager, Array.prototype.slice.call(arguments, 1));
+                this.manager[level].apply(this.manager, Array.prototype.slice.call(arguments, 1));
             }
         } else {
             this.manager.debug(arguments);

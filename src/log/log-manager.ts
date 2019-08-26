@@ -43,13 +43,13 @@ export class LogManager implements ILogger {
             if (this.logLevels.indexOf(level) >= 0) {
                 if (level === 'error') {
                     arguments[0] = '[ERROR]';
-                    this.manager.log.call(this.manager, arguments);
+                    this.manager.log.apply(this.manager, arguments as any);
                 } else {
-                    this.manager[level].call(this.manager, Array.prototype.slice.call(arguments, 1));
+                    this.manager[level].apply(this.manager, Array.prototype.slice.call(arguments, 1));
                 }
             }
         } else {
-            this.manager.log.call(this.manager, arguments);
+            this.manager.log.apply(this.manager, arguments as any);
         }
 
     }
